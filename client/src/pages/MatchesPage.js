@@ -168,13 +168,14 @@ class MatchesPage extends React.Component {
 
                             <Row gutter='30' align='middle' justify='center'>
                                 <Col span={9} style={{ textAlign: 'left' }}>
-                                <Progress value={this.state.selectedMatchDetails.ShotsOnTargetHome * 100 / this.state.selectedMatchDetails.ShotsHome}>{this.state.selectedMatchDetails.ShotsOnTargetHome} / {this.state.selectedMatchDetails.ShotsHome}</Progress>
+                                    <Progress value={this.state.selectedMatchDetails.ShotsOnTargetHome * 100 / this.state.selectedMatchDetails.ShotsHome}>{this.state.selectedMatchDetails.ShotsOnTargetHome} / {this.state.selectedMatchDetails.ShotsHome}</Progress>
                                 </Col >
                                 <Col span={6} style={{ textAlign: 'center' }}>
                                     Shot Accuracy
                                 </Col >
                                 <Col span={9} style={{ textAlign: 'right' }}>
                                     {/* TASK 18: add a progress bar to display the shot accuracy for the away team -  look at the progress bar in column 1 of this row for reference*/}
+                                    <Progress value={this.state.selectedMatchDetails.ShotsOnTargetAway * 100 / this.state.selectedMatchDetails.ShotsAway}>{this.state.selectedMatchDetails.ShotsOnTargetAway} / {this.state.selectedMatchDetails.ShotsAway}</Progress>
                                 </Col>
                             </Row>
                             <Row gutter='30' align='middle' justify='center'>
