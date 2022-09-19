@@ -420,7 +420,7 @@ async function search_players(req, res) {
     if (req.query.page && !isNaN(req.query.page)) {
         // This is the case where page is defined.
         // TODO: query and return results here:
-        connection.query(`SELECT Name, Nationality, OverallRating AS Rating, Potential, Club, Value
+        connection.query(`SELECT PlayerId, Name, Nationality, OverallRating AS Rating, Potential, Club, Value
             FROM Players
             WHERE Name LIKE '${name}' and
             Nationality LIKE '${nationality}' and
@@ -442,7 +442,7 @@ async function search_players(req, res) {
 
     } else {
 
-        connection.query(`SELECT Name, Nationality, OverallRating AS Rating, Potential, Club, Value
+        connection.query(`SELECT PlayerId, Name, Nationality, OverallRating AS Rating, Potential, Club, Value
             FROM Players
             WHERE Name LIKE '${name}' and
             Nationality LIKE '${nationality}' and
