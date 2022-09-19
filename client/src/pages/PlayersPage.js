@@ -224,10 +224,10 @@ class PlayersPage extends React.Component {
                             </Col>
                             {/* TASK 28: add two more columns here for Height and Weight, with the appropriate labels as above */}
                             <Col>
-                            Age: {this.state.selectedPlayerDetails.Height}
+                            Height: {this.state.selectedPlayerDetails.Height}
                             </Col>
                             <Col>
-                            Age: {this.state.selectedPlayerDetails.Weight}
+                            Weight: {this.state.selectedPlayerDetails.Weight}
                             </Col>
 
                             <Col flex={2} style={{ textAlign: 'right' }}>
@@ -277,7 +277,25 @@ class PlayersPage extends React.Component {
                                 <Col  push={2} flex={2}>
                                 {/*TASK 32: In case the player is a GK, show a radar chart (replacing 'null' below) with the labels: Agility, Ball Control, Passing, Positioning, Stamina, Strength */}
 
-                                    {this.state.selectedPlayerDetails.BestPosition === 'GK'?null:<RadarChart
+                                    {this.state.selectedPlayerDetails.BestPosition === 'GK'?<RadarChart
+                                data={[this.state.selectedPlayerDetails]}
+                                tickFormat={t => wideFormat(t)}
+                                startingAngle={0}
+                                domains={[
+                                    { name: 'Diving', domain: [0, 100], getValue: d => d.GKDiving },
+                                    { name: 'Handling', domain: [0, 100], getValue: d => d.GKHandling },
+                                    { name: 'Kicking', domain: [0, 100], getValue: d => d.GKKicking },
+                                    { name: 'Penalties', domain: [0, 100], getValue: d => d.GKPenalties },
+                                    { name: 'Positioning', domain: [0, 100], getValue: d => d.GKPositioning },
+                                    { name: 'Reflexes', domain: [0, 100], getValue: d => d.GKReflexes }
+                                ]}
+                                width={450}
+                                height={400}
+                                
+                            />
+                                    
+                                    
+                                    :<RadarChart
                                 data={[this.state.selectedPlayerDetails]}
                                 tickFormat={t => wideFormat(t)}
                                 startingAngle={0}
