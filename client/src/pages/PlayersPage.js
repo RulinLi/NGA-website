@@ -244,6 +244,13 @@ class PlayersPage extends React.Component {
                                 Release Clause: {this.state.selectedPlayerDetails.ReleaseClause}
                                 </Col>
                                 {/* TASK 29: Create 2 additional columns for the attributes 'Wage' and 'Contract Valid Until' (use spaces between the words when labelling!) */}
+                                <Col>
+                                Wage: {this.state.selectedPlayerDetails.Wage}
+                                </Col>
+                                <Col>
+                                Contract Valid Until: {this.state.selectedPlayerDetails.ContractValidUntil}
+                                </Col>
+                            
                             </Row>
                         </CardBody>
 
@@ -257,11 +264,16 @@ class PlayersPage extends React.Component {
                             <Rate disabled defaultValue={this.state.selectedPlayerDetails.Skill} />
                             <h6>Reputation</h6>
                             {/* TASK 30: create a star rating component for 'InternationalReputation'. Make sure you use the 'disabled' option as above to ensure it is read-only*/}
+                            <Rate disabled defaultValue={this.state.selectedPlayerDetails.InternationalReputation} />
                             <Divider/>
                             <h6>Best Rating</h6>
                                 <Progress style={{ width: '20vw'}} value={this.state.selectedPlayerDetails.BestOverallRating} >{this.state.selectedPlayerDetails.BestOverallRating}</Progress>
-                                {/* TASK 31: create the headings and progress bars for 'Potential' and 'Rating'. Use the same style as the one above for 'Best Rating'.*/}
-                                </Col >
+                            {/* TASK 31: create the headings and progress bars for 'Potential' and 'Rating'. Use the same style as the one above for 'Best Rating'.*/}
+                            <h6>Potential</h6>
+                                <Progress style={{ width: '20vw'}} value={this.state.selectedPlayerDetails.Potential} >{this.state.selectedPlayerDetails.Potential}</Progress>
+                            <h6>Rating</h6>
+                                <Progress style={{ width: '20vw'}} value={this.state.selectedPlayerDetails.Rating} >{this.state.selectedPlayerDetails.Rating}</Progress> 
+                            </Col >
                                 <Col  push={2} flex={2}>
                                 {/*TASK 32: In case the player is a GK, show a radar chart (replacing 'null' below) with the labels: Agility, Ball Control, Passing, Positioning, Stamina, Strength */}
 
