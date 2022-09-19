@@ -54,7 +54,7 @@ class MatchesPage extends React.Component {
 
     updateSearchResults() {
         //TASK 11: call getMatchSearch and update matchesResults in state. See componentDidMount() for a hint
-        this.getMatchSearch(this.state.homeQuery, this.state.awayQuery,null,null)
+        this.getMatchSearch(this.state.homeQuery, this.state.awayQuery, null, null)
 
     }
 

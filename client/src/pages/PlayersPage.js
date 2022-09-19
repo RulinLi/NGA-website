@@ -101,10 +101,12 @@ class PlayersPage extends React.Component {
 
     handleClubQueryChange(event) {
         // TASK 20: update state variables appropriately. See handleNameQueryChange(event) for reference
+        this.setState({ clubQuery: event.target.value })
     }
 
     handleNationalityQueryChange(event) {
         // TASK 21: update state variables appropriately. See handleNameQueryChange(event) for reference
+        this.setState({ nationalityQuery: event.target.value })
     }
 
     handleRatingChange(value) {
@@ -114,6 +116,8 @@ class PlayersPage extends React.Component {
 
     handlePotentialChange(value) {
         // TASK 22: parse value and update state variables appropriately. See handleRatingChange(value) for reference
+        this.setState({ potLowQuery: value[0] })
+        this.setState({ potHighQuery: value[1] })
     }
 
 
@@ -121,6 +125,7 @@ class PlayersPage extends React.Component {
     updateSearchResults() {
 
         //TASK 23: call getPlayerSearch and update playerResults in state. See componentDidMount() for a hint
+        this.getPlayerSearch(this.state.nameQuery, this.state.nationalityQuery, this.state.clubQuery, this.state.ratingHighQuery, this.state.ratingLowQuery, this.state.potHighQuery, this.state.potLowQuery, null, null)
 
     }
 
