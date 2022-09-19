@@ -159,16 +159,24 @@ class PlayersPage extends React.Component {
                             <FormInput placeholder="Nationality" value={this.state.nationalityQuery} onChange={this.handleNationalityQueryChange} />
                         </FormGroup></Col>
                         {/* TASK 26: Create a column for Club, using the elements and style we followed in the above two columns. Use the onChange method (handleClubQueryChange)  */}
-
+                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                            <label>Club</label>
+                            <FormInput placeholder="Club" value={this.state.clubQuery} onChange={this.handleClubQueryChange} />
+                        </FormGroup></Col>
                     </Row>
                     <br></br>
                     <Row>
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
                             <label>Rating</label>
                             <Slider range defaultValue={[50, 100]} onChange={this.handleRatingChange} />
-
                         </FormGroup></Col>
+                        
                         {/* TASK 27: Create a column with a label and slider in a FormGroup item for filtering by Potential. See the column above for reference and use the onChange method (handlePotentialChange)  */}
+                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
+                            <label>PotentialRating</label>
+                            <Slider range defaultValue={[50, 100]} onChange={this.handlePotentialChange} />
+                        </FormGroup></Col>
+                        
                         <Col flex={2}><FormGroup style={{ width: '10vw' }}>
                             <Button style={{ marginTop: '4vh' }} onClick={this.updateSearchResults}>Search</Button>
                         </FormGroup></Col>
@@ -179,7 +187,7 @@ class PlayersPage extends React.Component {
                 </Form>
                 <Divider />
                 {/* TASK 24: Copy in the players table from the Home page, but use the following style tag: style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }} - this should be one line of code! */}
-
+                <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}><Table dataSource={this.state.playersResults} columns={playerColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/></div>
                 <Divider />
 
                 {this.state.selectedPlayerDetails ? <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}>
@@ -197,30 +205,37 @@ class PlayersPage extends React.Component {
 
                             </Col>
                         </Row>
-                            <Row gutter='30' align='middle' justify='left'>
-                                <Col>
-                                <h5>{this.state.selectedPlayerDetails.Club}</h5>
-                                </Col>
-                                <Col>
-                                <h5>{this.state.selectedPlayerDetails.JerseyNumber}</h5>
-                                </Col>
-                                <Col>
-                                <h5>{this.state.selectedPlayerDetails.BestPosition}</h5>
-                                </Col>
-                            </Row>
-                            <br>
-                            </br>
-                            <Row gutter='30' align='middle' justify='left'>
-                                <Col>
-                                Age: {this.state.selectedPlayerDetails.Age}
-                                </Col>
-                                {/* TASK 28: add two more columns here for Height and Weight, with the appropriate labels as above */}
-                                <Col flex={2} style={{ textAlign: 'right' }}>
-                                {this.state.selectedPlayerDetails.Nationality}
-                                    <img src={this.state.selectedPlayerDetails.Flag} referrerpolicy="no-referrer" alt={null} style={{height:'3vh', marginLeft: '1vw'}}/>
-                                </Col>
+                        <Row gutter='30' align='middle' justify='left'>
+                            <Col>
+                            <h5>{this.state.selectedPlayerDetails.Club}</h5>
+                            </Col>
+                            <Col>
+                            <h5>{this.state.selectedPlayerDetails.JerseyNumber}</h5>
+                            </Col>
+                            <Col>
+                            <h5>{this.state.selectedPlayerDetails.BestPosition}</h5>
+                            </Col>
+                        </Row>
+                        <br>
+                        </br>
+                        <Row gutter='30' align='middle' justify='left'>
+                            <Col>
+                            Age: {this.state.selectedPlayerDetails.Age}
+                            </Col>
+                            {/* TASK 28: add two more columns here for Height and Weight, with the appropriate labels as above */}
+                            <Col>
+                            Age: {this.state.selectedPlayerDetails.Height}
+                            </Col>
+                            <Col>
+                            Age: {this.state.selectedPlayerDetails.Weight}
+                            </Col>
 
-                            </Row>
+                            <Col flex={2} style={{ textAlign: 'right' }}>
+                            {this.state.selectedPlayerDetails.Nationality}
+                                <img src={this.state.selectedPlayerDetails.Flag} referrerpolicy="no-referrer" alt={null} style={{height:'3vh', marginLeft: '1vw'}}/>
+                            </Col>
+
+                        </Row>
                             <Row gutter='30' align='middle' justify='left'>
                                 <Col>
                                 Value: {this.state.selectedPlayerDetails.Value}
