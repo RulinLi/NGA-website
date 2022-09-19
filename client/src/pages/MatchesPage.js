@@ -189,7 +189,21 @@ class MatchesPage extends React.Component {
                                     <h5>{this.state.selectedMatchDetails.CornersAway}</h5>
                                 </Col>
                             </Row>
-                            {/* TASK 16: add a row for fouls cards - check out the above lines for how we did it for corners */}
+                            {/* TASK 16: add a row for fouls - check out the above lines for how we did it for corners */}
+
+                            <Row gutter='30' align='middle' justify='center'>
+                                <Col span={9} style={{ textAlign: 'left' }}>
+                                    <h5>{this.state.selectedMatchDetails.FoulsHome}</h5>
+                                </Col >
+                                <Col span={6} style={{ textAlign: 'center' }}>
+                                    Fouls
+                                </Col >
+                                <Col span={9} style={{ textAlign: 'right' }}>
+                                    <h5>{this.state.selectedMatchDetails.FoulsAway}</h5>
+                                </Col>
+                            </Row>
+
+
                             <Row gutter='30' align='middle' justify='center'>
                                 <Col span={9} style={{ textAlign: 'left' }}>
                                     <h5>{this.state.selectedMatchDetails.RCHome}</h5>
@@ -203,6 +217,17 @@ class MatchesPage extends React.Component {
                             </Row>
                             {/* TASK 17: add a row for yellow cards - check out the above lines for how we did it for red cards */}
                             
+                            <Row gutter='30' align='middle' justify='center'>
+                                <Col span={9} style={{ textAlign: 'left' }}>
+                                    <h5>{this.state.selectedMatchDetails.YCHome}</h5>
+                                </Col >
+                                <Col span={6} style={{ textAlign: 'center' }}>
+                                    Yellow Cards
+                                </Col >
+                                <Col span={9} style={{ textAlign: 'right' }}>
+                                    <h5>{this.state.selectedMatchDetails.YCAway}</h5>
+                                </Col>
+                            </Row>
 
                         </CardBody>
                     </Card>
