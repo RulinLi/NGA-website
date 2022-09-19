@@ -41,8 +41,30 @@ const playerColumns = [
         key: 'Rating',
         sorter: (a, b) => a.Rating - b.Rating
 
-    }
+    },
     // TASK 19: copy over your answers for tasks 7 - 9 to add columns for potential, club, and value
+    // TASK 7: add a column for Potential, with the ability to (numerically) sort ,
+    {
+        title: 'Potential',
+        dataIndex: 'Potential',
+        key: 'Potential',
+        sorter: (a, b) => a.Rating - b.Rating
+        
+    },
+    // TASK 8: add a column for Club, with the ability to (alphabetically) sort 
+    {
+        title: 'Club',
+        dataIndex: 'Club',
+        key: 'Club',
+        sorter: (a, b) => a.Club.localeCompare(b.Club)
+        
+    },
+    // TASK 9: add a column for Value - no sorting required
+    {
+        title: 'Value',
+        dataIndex: 'Value',
+        key: 'Value'
+    }
 ];
 
 
