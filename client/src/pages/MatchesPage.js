@@ -155,6 +155,19 @@ class MatchesPage extends React.Component {
                             {/* TASK 15: create a row for goals at half time similar to the row for 'Goals' above, but use h5 in place of h3!  */}
                             <Row gutter='30' align='middle' justify='center'>
                                 <Col span={9} style={{ textAlign: 'left' }}>
+                                    <h5>{this.state.selectedMatchDetails.HTHomeGoals}</h5>
+                                </Col >
+                                <Col span={6} style={{ textAlign: 'center' }}>
+                                    Half Time Goals
+                                </Col >
+                                <Col span={9} style={{ textAlign: 'right' }}>
+                                    <h5>{this.state.selectedMatchDetails.HTAwayGoals}</h5>
+                                </Col>
+                            </Row>
+
+
+                            <Row gutter='30' align='middle' justify='center'>
+                                <Col span={9} style={{ textAlign: 'left' }}>
                                 <Progress value={this.state.selectedMatchDetails.ShotsOnTargetHome * 100 / this.state.selectedMatchDetails.ShotsHome}>{this.state.selectedMatchDetails.ShotsOnTargetHome} / {this.state.selectedMatchDetails.ShotsHome}</Progress>
                                 </Col >
                                 <Col span={6} style={{ textAlign: 'center' }}>
