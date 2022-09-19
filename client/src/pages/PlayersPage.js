@@ -125,8 +125,9 @@ class PlayersPage extends React.Component {
     updateSearchResults() {
 
         //TASK 23: call getPlayerSearch and update playerResults in state. See componentDidMount() for a hint
-        this.getPlayerSearch(this.state.nameQuery, this.state.nationalityQuery, this.state.clubQuery, this.state.ratingHighQuery, this.state.ratingLowQuery, this.state.potHighQuery, this.state.potLowQuery, null, null)
-
+        getPlayerSearch(this.state.nameQuery, this.state.nationalityQuery, this.state.clubQuery, this.state.ratingHighQuery, this.state.ratingLowQuery, this.state.potHighQuery, this.state.potLowQuery, null, null).then(res => {
+            this.setState({ playersResults: res.results })
+        })
     }
 
     componentDidMount() {
@@ -136,7 +137,9 @@ class PlayersPage extends React.Component {
 
         // TASK 25: call getPlayer with the appropriate parameter and set update the correct state variable. 
         // See the usage of getMatch in the componentDidMount method of MatchesPage for a hint! 
-
+        getPlayer(this.state.selectedPlayerId).then(res => {
+            this.setState({ selectedPlayerDetails: res.results[0] })
+        })
     }
 
     render() {
