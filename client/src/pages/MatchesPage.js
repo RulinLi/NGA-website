@@ -45,7 +45,6 @@ class MatchesPage extends React.Component {
     }
 
     handleHomeQueryChange(event) {
-        // TASK 10: update state variables appropriately. See handleAwayQueryChange(event) for reference
         this.setState({ homeQuery: event.target.value })
     }
     goToMatch(matchId) {
@@ -53,7 +52,6 @@ class MatchesPage extends React.Component {
     }
 
     updateSearchResults() {
-        //TASK 11: call getMatchSearch and update matchesResults in state. See componentDidMount() for a hint
         getMatchSearch(this.state.homeQuery, this.state.awayQuery, null, null).then(res => {
             this.setState({ matchesResults: res.results })
         })
@@ -97,7 +95,6 @@ class MatchesPage extends React.Component {
 
                 </Form>
                 <Divider />
-                {/* TASK 12: Copy over your implementation of the matches table from the home page */}
                 <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}>
                 <Table onRow={(record, rowIndex) => {
                 return {
@@ -106,16 +103,13 @@ class MatchesPage extends React.Component {
                 }} 
                 dataSource={this.state.matchesResults} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}>
                     <ColumnGroup title="Teams">
-                    {/* TASK 4: correct the title for the 'Home' column and add a similar column for 'Away' team in this ColumnGroup */}
                     <Column title="HomeTeam" dataIndex="Home" key="Home" sorter= {(a, b) => a.Home.localeCompare(b.Home)}/>
                     <Column title="AwayTeam" dataIndex="Away" key="Away" sorter= {(a, b) => a.Away.localeCompare(b.Away)}/>
                     </ColumnGroup>
                     <ColumnGroup title="Goals">
-                    {/* TASK 5: add columns for home and away goals in this ColumnGroup, with the ability to sort values in these columns numerically */}
                     <Column title="HomeGoals" dataIndex="HomeGoals" key="HomeGoals" sorter= {(a, b) => Number(a.HomeGoals)-Number(b.HomeGoals)}/>
                     <Column title="AwayGoals" dataIndex="AwayGoals" key="AwayGoals" sorter= {(a, b) => Number(a.AwayGoals)-Number(b.AwayGoals)}/>
                     </ColumnGroup>
-                    {/* TASK 6: create two columns (independent - not in a column group) for the date and time. Do not add a sorting functionality */}
                     <Column title="Date" dataIndex="Date" key="Date"/>
                     <Column title="Time" dataIndex="Time" key="Time"/>
                 </Table>
@@ -135,7 +129,6 @@ class MatchesPage extends React.Component {
                                 <Col flex={2} style={{ textAlign: 'center' }}>
                                     {this.state.selectedMatchDetails.Date} at {this.state.selectedMatchDetails.Time}
                                 </Col>
-                                {/* TASK 13: Add a column with flex = 2, and text alignment = right to display the name of the away team - similar to column 1 in this row */}
                                 <Col flex={2} style={{ textAlign: 'right' }}>
                                     <CardTitle>{this.state.selectedMatchDetails.Away}</CardTitle>
                                 </Col>
@@ -148,13 +141,11 @@ class MatchesPage extends React.Component {
                                 <Col span={6} style={{ textAlign: 'center' }}>
                                     Goals
                                 </Col >
-                                {/* TASK 14: Add a column with span = 9, and text alignment = right to display the # of goals the away team scored - similar 1 in this row */}
 
                                 <Col span={9} style={{ textAlign: 'right' }}>
                                     <h3>{this.state.selectedMatchDetails.AwayGoals}</h3>
                                 </Col>
                             </Row>
-                            {/* TASK 15: create a row for goals at half time similar to the row for 'Goals' above, but use h5 in place of h3!  */}
                             <Row gutter='30' align='middle' justify='center'>
                                 <Col span={9} style={{ textAlign: 'left' }}>
                                     <h5>{this.state.selectedMatchDetails.HTHomeGoals}</h5>
@@ -176,7 +167,6 @@ class MatchesPage extends React.Component {
                                     Shot Accuracy
                                 </Col >
                                 <Col span={9} style={{ textAlign: 'right' }}>
-                                    {/* TASK 18: add a progress bar to display the shot accuracy for the away team -  look at the progress bar in column 1 of this row for reference*/}
                                     <Progress value={this.state.selectedMatchDetails.ShotsOnTargetAway * 100 / this.state.selectedMatchDetails.ShotsAway}>{this.state.selectedMatchDetails.ShotsOnTargetAway} / {this.state.selectedMatchDetails.ShotsAway}</Progress>
                                 </Col>
                             </Row>
@@ -191,7 +181,6 @@ class MatchesPage extends React.Component {
                                     <h5>{this.state.selectedMatchDetails.CornersAway}</h5>
                                 </Col>
                             </Row>
-                            {/* TASK 16: add a row for fouls - check out the above lines for how we did it for corners */}
 
                             <Row gutter='30' align='middle' justify='center'>
                                 <Col span={9} style={{ textAlign: 'left' }}>
@@ -217,7 +206,6 @@ class MatchesPage extends React.Component {
                                     <h5>{this.state.selectedMatchDetails.RCAway}</h5>
                                 </Col>
                             </Row>
-                            {/* TASK 17: add a row for yellow cards - check out the above lines for how we did it for red cards */}
                             
                             <Row gutter='30' align='middle' justify='center'>
                                 <Col span={9} style={{ textAlign: 'left' }}>
