@@ -1,9 +1,9 @@
 {
-  "short_name": "FIFA Client",
-  "name": "CIS 550 - HW2 FIFA Client",
+  "short_name": "NGA exhibition",
+  "name": "CIS 550 - NGA exhibition",
   "icons": [
     {
-      "src": "football.svg",
+      "src": "National_Gallery_of_Art_logo.svg",
       "type": "image/png",
       "sizes": "512x512"
     }
