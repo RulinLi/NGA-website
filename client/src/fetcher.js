@@ -1,14 +1,14 @@
 import config from './config.json'
 
-const getAllMatches = async (page, pagesize, league) => {
-    var res = await fetch(`http://${config.server_host}:${config.server_port}/matches/${league}?page=${page}&pagesize=${pagesize}`, {
+const getAllArtworks = async (page, pagesize, classification) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/artworks/${classification}?page=${page}&pagesize=${pagesize}`, {
         method: 'GET',
     })
     return res.json()
 }
 
-const getAllPlayers = async (page, pagesize) => {
-    var res = await fetch(`http://${config.server_host}:${config.server_port}/players?page=${page}&pagesize=${pagesize}`, {
+const getAllArtists = async (page, pagesize) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/artists?page=${page}&pagesize=${pagesize}`, {
         method: 'GET',
     })
     return res.json()
@@ -46,8 +46,8 @@ const getPlayerSearch = async (name, nationality, club, rating_high, rating_low,
 
 
 export {
-    getAllMatches,
-    getAllPlayers,
+    getAllArtworks,
+    getAllArtists,
     getMatch,
     getPlayer,
     getMatchSearch,

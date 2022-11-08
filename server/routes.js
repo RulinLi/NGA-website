@@ -25,18 +25,18 @@ async function hello(req, res) {
 
 
 
-// Route 3 (handler)
-async function all_matches(req, res) {
-    const league = req.params.league ? req.params.league : 'D1'
+// Route 2 (handler)
+async function all_artworks(req, res) {
+    const classification = req.params.classification ? req.params.classification : 'painting'
     const page = req.query.page
     const pagesize = req.query.pagesize ? req.query.pagesize : '10'
     const start=(page-1)*pagesize
 
     if (req.query.page && !isNaN(req.query.page)) {
-        connection.query(`SELECT MatchId, Date, Time, HomeTeam AS Home, AwayTeam AS Away, FullTimeGoalsH AS HomeGoals, FullTimeGoalsA AS AwayGoals  
-        FROM Matches 
-        WHERE Division = '${league}' 
-        ORDER BY HomeTeam, AwayTeam
+        connection.query(`select DISTINCT o.title as title, o.visualBrowserClassification as classification, o.beginYear as beginYear,o.endYear as endYear, c.forwardDisplayName as artist, c.nationality as nation
+        from objects o join objects_constituents oc on o.objectID = oc.objectID join constituents c on c.constituentID = oc.constituentID
+        where oc.roleType='artist' and o.visualBrowserClassification='${classification}' 
+        order by o.title
         LIMIT ${start},${pagesize}`, function (error, results, fields) {
 
             if (error) {
@@ -49,10 +49,10 @@ async function all_matches(req, res) {
 
 
     } else {
-        connection.query(`SELECT MatchId, Date, Time, HomeTeam AS Home, AwayTeam AS Away, FullTimeGoalsH AS HomeGoals, FullTimeGoalsA AS AwayGoals  
-        FROM Matches 
-        WHERE Division = '${league}'
-        ORDER BY HomeTeam, AwayTeam`, function (error, results, fields) {
+        connection.query(`select DISTINCT o.title as title, o.visualBrowserClassification as classification, o.beginYear as beginYear,o.endYear as endYear, c.forwardDisplayName as artist, c.nationality as nation
+        from objects o join objects_constituents oc on o.objectID = oc.objectID join constituents c on c.constituentID = oc.constituentID
+        where oc.roleType='artist' and o.visualBrowserClassification='${classification}' 
+        order by o.title`, function (error, results, fields) {
 
             if (error) {
                 console.log(error)
@@ -64,16 +64,16 @@ async function all_matches(req, res) {
     }
 }
 
-// Route 4 (handler)
-async function all_players(req, res) {
+// Route 3 (handler)
+async function all_artists(req, res) {
     const page = req.query.page
     const pagesize = req.query.pagesize ? req.query.pagesize : '10'
     const start=(page-1)*pagesize
 
     if (req.query.page && !isNaN(req.query.page)) {
-        connection.query(`SELECT PlayerID, Name, Nationality, OverallRating AS Rating, Potential, Club, Value  
-        FROM Players  
-        ORDER BY Name
+        connection.query(`SELECT forwardDisplayName,nationality,constituentType
+        FROM constituents
+        ORDER BY forwardDisplayName
         LIMIT ${start},${pagesize}`, function (error, results, fields) {
 
             if (error) {
@@ -87,9 +87,9 @@ async function all_players(req, res) {
 
     } else {
     
-        connection.query(`SELECT PlayerID, Name, Nationality, OverallRating AS Rating, Potential, Club, Value  
-        FROM Players 
-        ORDER BY Name`, function (error, results, fields){
+        connection.query(`SELECT forwardDisplayName,nationality,constituentType
+        FROM constituents
+        ORDER BY forwardDisplayName`, function (error, results, fields){
 
             if (error) {
                 console.log(error)
@@ -411,8 +411,8 @@ async function search_players(req, res) {
 
 module.exports = {
     hello,
-    all_matches,
-    all_players,
+    all_artworks,
+    all_artists,
     match,
     player,
     search_matches,

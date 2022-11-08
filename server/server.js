@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql      = require('mysql');
+const mysql = require('mysql');
 var cors = require('cors')
 
 
@@ -15,10 +15,10 @@ app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }));
 app.get('/hello', routes.hello)
 
 // Route 3 - register as GET 
-app.get('/matches/:league', routes.all_matches)
+app.get('/artworks/:classification', routes.all_artworks)
 
 // Route 4 - register as GET 
-app.get('/players', routes.all_players)
+app.get('/artists', routes.all_artists)
 
 // Route 5 - register as GET 
 app.get('/match', routes.match)

@@ -6,54 +6,36 @@ import {
 } from 'antd'
 
 import MenuBar from '../components/MenuBar';
-import { getAllMatches, getAllPlayers } from '../fetcher'
+import { getAllArtworks, getAllArtists } from '../fetcher'
 const { Column, ColumnGroup } = Table;
 const { Option } = Select;
 
 
-const playerColumns = [
+const artistsColumns = [
   {
     title: 'Name',
-    dataIndex: 'Name',
-    key: 'Name',
-    sorter: (a, b) => a.Name.localeCompare(b.Name),
-    render: (text, row) => <a href={`/players?id=${row.PlayerId}`}>{text}</a>
+    dataIndex: 'forwardDisplayName',
+    key: 'forwardDisplayName',
+    sorter: (a, b) => a.forwardDisplayName.localeCompare(b.forwardDisplayName),
+    // render: (text, row) => <a href={`/artists?id=${row.constituentID}`}>{text}</a>
   },
+
   {
     title: 'Nationality',
-    dataIndex: 'Nationality',
-    key: 'Nationality',
-    sorter: (a, b) => a.Nationality.localeCompare(b.Nationality)
+    dataIndex: 'nationality',
+    key: 'nationality',
+    sorter: (a, b) => a.nationality.localeCompare(b.nationality)
   },
-  {
-    title: 'Rating',
-    dataIndex: 'Rating',
-    key: 'Rating',
-    sorter: (a, b) => a.Rating - b.Rating
-    
-  },
+  
 
   {
-    title: 'Potential',
-    dataIndex: 'Potential',
-    key: 'Potential',
-    sorter: (a, b) => a.Rating - b.Rating
+    title: 'Type',
+    dataIndex: 'constituentType',
+    key: 'constituentType',
+    sorter: (a, b) => a.constituentType.localeCompare(b.constituentType)
     
-  },
-
-  {
-    title: 'Club',
-    dataIndex: 'Club',
-    key: 'Club',
-    sorter: (a, b) => a.Club.localeCompare(b.Club)
-    
-  },
-
-  {
-    title: 'Value',
-    dataIndex: 'Value',
-    key: 'Value'
   }
+
 ];
 
 class HomePage extends React.Component {
@@ -62,14 +44,14 @@ class HomePage extends React.Component {
     super(props)
 
     this.state = {
-      matchesResults: [],
-      matchesPageNumber: 1,
-      matchesPageSize: 10,
-      playersResults: [],
+      artworksResults: [],
+      artworksPageNumber: 1,
+      artworksPageSize: 10,
+      artistsResults: [],
       pagination: null  
     }
 
-    this.leagueOnChange = this.leagueOnChange.bind(this)
+    this.classificationOnChange = this.classificationOnChange.bind(this)
     this.goToMatch = this.goToMatch.bind(this)
   }
 
@@ -78,21 +60,21 @@ class HomePage extends React.Component {
     window.location = `/matches?id=${matchId}`
   }
 
-  leagueOnChange(value) {
-   getAllMatches(null, null, value).then(res => {
-      this.setState({ matchesResults: res.results })
+  classificationOnChange(value) {
+   getAllArtworks(null, null, value).then(res => {
+      this.setState({ artworksResults: res.results })
     })
     
   }
 
   componentDidMount() {
-    getAllMatches(null, null, 'D1').then(res => {
-      this.setState({ matchesResults: res.results })
+    getAllArtworks(null, null, 'painting').then(res => {
+      this.setState({ artworksResults: res.results })
     })
 
-    getAllPlayers(null,null).then(res => {
+    getAllArtists(null,null).then(res => {
       //console.log(res.results)
-      this.setState({ playersResults: res.results })
+      this.setState({ artistsResults: res.results })
     })
 
  
@@ -105,36 +87,41 @@ class HomePage extends React.Component {
       <div>
         <MenuBar />
         <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
-          <h3>Players</h3>
-          <Table dataSource={this.state.playersResults} columns={playerColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
+          <h3>Artists</h3>
+          <Table dataSource={this.state.artistsResults} columns={artistsColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/>
         </div>
         <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}>
-          <h3>Matches</h3>
-          <Select defaultValue="D1" style={{ width: 120 }} onChange={this.leagueOnChange}>
-            <Option value="D1">Bundesliga</Option>
-             {/* TASK 3: Take a look at Dataset Information.md from MS1 and add other options to the selector here  */}
-             <Option value="SP1">La Liga</Option>
-             <Option value="F1">Ligue 1</Option>
-             <Option value="I1">Series A</Option>
-             <Option value="E0">Premier League</Option>
+          <h3>Artworks</h3>
+          <Select defaultValue="painting" style={{ width: 120 }} onChange={this.classificationOnChange}>
+            <Option value="painting">painting</Option>
+            <Option value="sculpture">sculpture</Option>
+            <Option value="drawing">drawing</Option>
+            <Option value="print">print</Option>
+            <Option value="decorative art">decorative art</Option>
+            <Option value="volume">volume</Option>
+            <Option value="portfolio">portfolio</Option>
+            <Option value="technical material">technical material</Option>
+            <Option value="photograph">photograph</Option>
+            <Option value="new media">new media</Option>
           </Select>
           
           <Table onRow={(record, rowIndex) => {
           return {
-          onClick: event => {this.goToMatch(record.MatchId)}, // clicking a row takes the user to a detailed view of the match in the /matches page using the MatchId parameter  
+          // onClick: event => {this.goToMatch(record.MatchId)}, // clicking a row takes the user to a detailed view of the match in the /matches page using the MatchId parameter  
           };
           }} 
-          dataSource={this.state.matchesResults} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}>
-            <ColumnGroup title="Teams">
-              <Column title="HomeTeam" dataIndex="Home" key="Home" sorter= {(a, b) => a.Home.localeCompare(b.Home)}/>
-              <Column title="AwayTeam" dataIndex="Away" key="Away" sorter= {(a, b) => a.Away.localeCompare(b.Away)}/>
-            </ColumnGroup>
-            <ColumnGroup title="Goals">
-              <Column title="HomeGoals" dataIndex="HomeGoals" key="HomeGoals" sorter= {(a, b) => Number(a.HomeGoals)-Number(b.HomeGoals)}/>
-              <Column title="AwayGoals" dataIndex="AwayGoals" key="AwayGoals" sorter= {(a, b) => Number(a.AwayGoals)-Number(b.AwayGoals)}/>
-            </ColumnGroup>
-             <Column title="Date" dataIndex="Date" key="Date"/>
-             <Column title="Time" dataIndex="Time" key="Time"/>
+          dataSource={this.state.artworksResults} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}>
+            
+              <Column title="Title" dataIndex="title" key="title" sorter= {(a, b) => a.title.localeCompare(b.title)}/>
+
+              <Column title="Nation" dataIndex="nation" key="nation" sorter= {(a, b) => a.nation.localeCompare(b.nation)}/>
+
+              <Column title="Artist" dataIndex="artist" key="artist" sorter= {(a, b) => a.artist.localeCompare(b.artist)}/>
+              
+              <Column title="BeginYear" dataIndex="beginYear" key="AwabeginYeary" sorter= {(a, b) => a.beginYear.localeCompare(b.beginYear)}/>
+              <Column title="FinishYear" dataIndex="endYear" key="endYear" sorter= {(a, b) => a.endYear.localeCompare(b.endYear)}/>
+              
+
           </Table>
 
         </div>
