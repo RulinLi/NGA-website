@@ -14,9 +14,6 @@ app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }));
 // Route 1 - register as GET 
 app.get('/hello', routes.hello)
 
-// Route 2 - register as GET 
-app.get('/jersey/:choice', routes.jersey)
-
 // Route 3 - register as GET 
 app.get('/matches/:league', routes.all_matches)
 

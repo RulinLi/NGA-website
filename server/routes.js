@@ -17,28 +17,12 @@ connection.connect();
 // Route 1 (handler)
 async function hello(req, res) {
     if (req.query.name) {
-        res.send(`Hello, ${req.query.name}! Welcome to the FIFA server!`)
+        res.send(`Hello, ${req.query.name}! Welcome to the NGA server!`)
     } else {
-        res.send(`Hello! Welcome to the FIFA server!`)
+        res.send(`Hello! Welcome to the NGA server!`)
     }
 }
 
-
-// Route 2 (handler)
-async function jersey(req, res) {
-    const colors = ['red', 'blue']
-    const jersey_number = Math.floor(Math.random() * 20) + 1
-    const name = req.query.name ? req.query.name : "player"
-
-    if (req.params.choice === 'number') {
-        res.json({ message: `Hello, ${name}!`, jersey_number: jersey_number })
-    } else if (req.params.choice === 'color') {
-        var lucky_color_index = Math.floor(Math.random() * 2) ;
-        res.json({ message: `Hello, ${name}!`, jersey_color: colors[lucky_color_index] })
-    } else {
-        res.json({ message: `Hello, ${name}, we like your jersey!` })
-    }
-}
 
 
 // Route 3 (handler)
@@ -427,7 +411,6 @@ async function search_players(req, res) {
 
 module.exports = {
     hello,
-    jersey,
     all_matches,
     all_players,
     match,
