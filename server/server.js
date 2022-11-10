@@ -24,7 +24,7 @@ app.get('/artists', routes.all_artists)
 app.get('/match', routes.match)
 
 // Route 6 - register as GET 
-app.get('/player', routes.player)
+app.get('/artist', routes.artist)
 
 // Route 7 - register as GET 
 app.get('/search/matches', routes.search_matches)

@@ -13,7 +13,6 @@ const connection = mysql.createConnection({
 connection.connect();
 
 
-
 // Route 1 (handler)
 async function hello(req, res) {
     if (req.query.name) {
@@ -23,9 +22,7 @@ async function hello(req, res) {
     }
 }
 
-
-
-// Route 2 (handler)
+// Route 2 (handler) done
 async function all_artworks(req, res) {
     const classification = req.params.classification ? req.params.classification : 'painting'
     const page = req.query.page
@@ -64,14 +61,14 @@ async function all_artworks(req, res) {
     }
 }
 
-// Route 3 (handler)
+// Route 3 (handler) done
 async function all_artists(req, res) {
     const page = req.query.page
     const pagesize = req.query.pagesize ? req.query.pagesize : '10'
     const start=(page-1)*pagesize
 
     if (req.query.page && !isNaN(req.query.page)) {
-        connection.query(`SELECT forwardDisplayName,nationality,constituentType
+        connection.query(`SELECT constituentID, forwardDisplayName,nationality,constituentType
         FROM constituents
         ORDER BY forwardDisplayName
         LIMIT ${start},${pagesize}`, function (error, results, fields) {
@@ -105,10 +102,10 @@ async function all_artists(req, res) {
 
 
 // ********************************************
-//             MATCH-SPECIFIC ROUTES
+//             ARTWORK-SPECIFIC ROUTES
 // ********************************************
 
-// Route 5 (handler)
+// Route 4 (handler) to do
 async function match(req, res) {
     const id = req.query.id
 
@@ -143,54 +140,27 @@ async function match(req, res) {
 }
 
 // ********************************************
-//            PLAYER-SPECIFIC ROUTES
+//            ARTIST-SPECIFIC ROUTES
 // ********************************************
 
-// Route 6 (handler)
-async function player(req, res) {
+// Route 5 (handler) done
+async function artist(req, res) {
     const id = req.query.id
 
     if (req.query.id && !isNaN(req.query.id)) {
-        connection.query(`SELECT PlayerId,  BestPosition
-        FROM Players
-        WHERE PlayerId = '${id}'`, function (error, results, fields){
-            if (error) {
-                var array=[]
-                res.json({results: array})
-            }else{
-                if(results.length==0){
-                    res.json({ results: results })
-                }else{
-                    var position=results[0].BestPosition
-                    if(position=="GK"){
-                            connection.query(`SELECT PlayerId, Name, Age, Photo, Nationality, Flag, OverallRating AS Rating, Potential, Club, ClubLogo, Value, Wage, InternationalReputation, Skill, JerseyNumber, ContractValidUntil, Height, Weight, BestPosition, BestOverallRating, ReleaseClause, GKPenalties, GKDiving, GKHandling, GKKicking, GKPositioning, GKReflexes
-                            FROM Players
-                            WHERE PlayerId = '${id}'`, function (error, results, fields){
-                                if (error) {
-                                    var array=[]
-                                    res.json({results: array})
-                                } else if (results) {
-                                    res.json({ results: results })
-                                }
-                            });
-                
-                        }else{
-                            connection.query(`SELECT PlayerId, Name, Age, Photo, Nationality, Flag, OverallRating AS Rating, Potential, Club, ClubLogo, Value, Wage, InternationalReputation, Skill, JerseyNumber, ContractValidUntil, Height, Weight, BestPosition, BestOverallRating, ReleaseClause, NPassing, NBallControl, NAdjustedAgility, NStamina, NStrength, NPositioning
-                            FROM Players
-                            WHERE PlayerId = '${id}'`, function (error, results, fields){
-                                if (error) {
-                                    var array=[]
-                                    res.json({results: array})
-                                } else if (results) {
-                                    res.json({ results: results })
-                                }
-                            });
-                
-                        }
-                    }
+        connection.query(`SELECT O.objectID AS ArtID, O.title AS Title 
+        FROM objects O
+        JOIN objects_constituents O_C ON O.objectID = O_C.objectID
+        JOIN constituents C ON O_C.constituentID = C.constituentID 
+        WHERE C.constituentID = '${id}'
+        ORDER BY O.objectID`, function (error, results, fields) {
 
-                
-                }
+            if (error) {
+                console.log(error)
+                res.json({ error: error })
+            } else if (results) {
+                res.json({ results: results })
+            }
         });
 
     } else {
@@ -207,7 +177,7 @@ async function player(req, res) {
 //             SEARCH ROUTES
 // ********************************************
 
-// Route 7 (handler)
+// Route 6 (handler) to do
 async function search_matches(req, res) {
     const home=req.query.Home
     const away=req.query.Away 
@@ -332,7 +302,7 @@ async function search_matches(req, res) {
 
 }
 
-// Route 8 (handler)
+// Route 7 (handler) to do
 async function search_players(req, res) {
     if(req.query.Name){
         var name='%'+req.query.Name+'%'
@@ -414,7 +384,7 @@ module.exports = {
     all_artworks,
     all_artists,
     match,
-    player,
+    artist,
     search_matches,
     search_players
 }

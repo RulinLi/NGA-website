@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 
 import HomePage from './pages/HomePage';
-import PlayersPage from './pages/PlayersPage';
+import ArtistsPage from './pages/ArtistsPage';
 import MatchesPage from './pages/MatchesPage';
 
 import 'antd/dist/antd.css';
@@ -25,9 +25,9 @@ ReactDOM.render(
 								<HomePage />
 							)}/>
         <Route exact
-							path="/players"
+							path="/artists"
 							render={() => (
-								<PlayersPage />
+								<ArtistsPage />
 							)}/>
         <Route exact
 							path="/matches"

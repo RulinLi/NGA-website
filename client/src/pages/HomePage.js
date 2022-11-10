@@ -17,7 +17,7 @@ const artistsColumns = [
     dataIndex: 'forwardDisplayName',
     key: 'forwardDisplayName',
     sorter: (a, b) => a.forwardDisplayName.localeCompare(b.forwardDisplayName),
-    // render: (text, row) => <a href={`/artists?id=${row.constituentID}`}>{text}</a>
+    render: (text, row) => <a href={`/artists?id=${row.constituentID}`}>{text}</a>
   },
 
   {

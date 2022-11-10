@@ -21,8 +21,8 @@ const getMatch = async (id) => {
     return res.json()
 }
 
-const getPlayer = async (id) => {
-    var res = await fetch(`http://${config.server_host}:${config.server_port}/player?id=${id}`, {
+const getArtist = async (id) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/artist?id=${id}`, {
         method: 'GET',
     })
     return res.json()
@@ -49,7 +49,7 @@ export {
     getAllArtworks,
     getAllArtists,
     getMatch,
-    getPlayer,
+    getArtist,
     getMatchSearch,
     getPlayerSearch
 }
