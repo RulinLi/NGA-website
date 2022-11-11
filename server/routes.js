@@ -68,7 +68,7 @@ async function all_artists(req, res) {
     const start=(page-1)*pagesize
 
     if (req.query.page && !isNaN(req.query.page)) {
-        connection.query(`SELECT constituentID, forwardDisplayName,nationality,constituentType
+        connection.query(`SELECT constituentID, forwardDisplayName, nationality, constituentType
         FROM constituents
         ORDER BY forwardDisplayName
         LIMIT ${start},${pagesize}`, function (error, results, fields) {
@@ -84,7 +84,7 @@ async function all_artists(req, res) {
 
     } else {
     
-        connection.query(`SELECT forwardDisplayName,nationality,constituentType
+        connection.query(`SELECT constituentID, forwardDisplayName,nationality,constituentType
         FROM constituents
         ORDER BY forwardDisplayName`, function (error, results, fields){
 
@@ -99,7 +99,6 @@ async function all_artists(req, res) {
 
     
 }
-
 
 // ********************************************
 //             ARTWORK-SPECIFIC ROUTES
@@ -148,7 +147,8 @@ async function artist(req, res) {
     const id = req.query.id
 
     if (req.query.id && !isNaN(req.query.id)) {
-        connection.query(`SELECT O.objectID AS ArtID, O.title AS Title 
+        connection.query(`SELECT O.objectID AS artID, O.title AS title, C.constituentID AS artistID, C.forwardDisplayName AS name, C.nationality AS nationality, 
+        O.beginYear AS beginYear, O.endYear AS endYear
         FROM objects O
         JOIN objects_constituents O_C ON O.objectID = O_C.objectID
         JOIN constituents C ON O_C.constituentID = C.constituentID 

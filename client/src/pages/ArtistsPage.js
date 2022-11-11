@@ -20,6 +20,7 @@ import { format } from 'd3-format';
 import MenuBar from '../components/MenuBar';
 import { getPlayerSearch, getArtist } from '../fetcher'
 const wideFormat = format('.3r');
+const { Column, ColumnGroup } = Table;
 
 
 const playerColumns = [
@@ -60,8 +61,10 @@ class ArtistsPage extends React.Component {
             ratingLowQuery: 0,
             potHighQuery: 100,
             potLowQuery: 0,
+            //1783 is the constituentID of picasso
             selectedArtistId: window.location.search ? window.location.search.substring(1).split('=')[1] : 1783,
             selectedArtistDetails: null,
+            selectedArtistWorks: [],
             playersResults: []
 
         }
@@ -113,6 +116,7 @@ class ArtistsPage extends React.Component {
 
         getArtist(this.state.selectedArtistId).then(res => {
             this.setState({ selectedArtistDetails: res.results[0] })
+            this.setState({ selectedArtistWorks: res.results })
         })
     }
 
@@ -122,7 +126,7 @@ class ArtistsPage extends React.Component {
             <div>
 
                 <MenuBar />
-                <Form style={{ width: '80vw', margin: '0 auto', marginTop: '5vh' }}>
+                {/* <Form style={{ width: '80vw', margin: '0 auto', marginTop: '5vh' }}>
                     <Row>
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
                             <label>Name</label>
@@ -156,10 +160,11 @@ class ArtistsPage extends React.Component {
                     </Row>
 
 
-                </Form>
-                <Divider />
+                </Form> */}
+                
+                {/* <Divider />
                 <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}><Table dataSource={this.state.playersResults} columns={playerColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/></div>
-                <Divider />
+                <Divider /> */}
 
                 {this.state.selectedArtistDetails ? <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}>
                     <Card>
@@ -167,29 +172,18 @@ class ArtistsPage extends React.Component {
                         <CardBody>
                         <Row gutter='30' align='middle' justify='center'>
                             <Col flex={2} style={{ textAlign: 'left' }}>
-                            <h3>{this.state.selectedArtistDetails.Name}</h3>
+                            <h3>Artist Name: {this.state.selectedArtistDetails.name}</h3>
 
                             </Col>
 
-                            <Col flex={2} style={{ textAlign: 'right' }}>
-                            <img src={this.state.selectedPlayerDetails.Photo} referrerpolicy="no-referrer" alt={null} style={{height:'15vh'}}/>
-
+                            <Col flex={2} style={{ textAlign: 'middle' }}>
+                            <h3>Nation: {this.state.selectedArtistDetails.nationality}</h3>
                             </Col>
                         </Row>
-                        <Row gutter='30' align='middle' justify='left'>
-                            <Col>
-                            <h5>{this.state.selectedPlayerDetails.Club}</h5>
-                            </Col>
-                            <Col>
-                            <h5>{this.state.selectedPlayerDetails.JerseyNumber}</h5>
-                            </Col>
-                            <Col>
-                            <h5>{this.state.selectedPlayerDetails.BestPosition}</h5>
-                            </Col>
-                        </Row>
-                        <br>
-                        </br>
-                        <Row gutter='30' align='middle' justify='left'>
+                       
+                        {/* <br>
+                        </br> */}
+                        {/* <Row gutter='30' align='middle' justify='left'>
                             <Col>
                             Age: {this.state.selectedPlayerDetails.Age}
                             </Col>
@@ -205,29 +199,51 @@ class ArtistsPage extends React.Component {
                                 <img src={this.state.selectedPlayerDetails.Flag} referrerpolicy="no-referrer" alt={null} style={{height:'3vh', marginLeft: '1vw'}}/>
                             </Col>
 
-                        </Row>
-                            <Row gutter='30' align='middle' justify='left'>
-                                <Col>
-                                Value: {this.state.selectedPlayerDetails.Value}
-                                </Col>
-                                <Col>
-                                Release Clause: {this.state.selectedPlayerDetails.ReleaseClause}
-                                </Col>
-                                <Col>
-                                Wage: {this.state.selectedPlayerDetails.Wage}
-                                </Col>
-                                <Col>
-                                Contract Valid Until: {this.state.selectedPlayerDetails.ContractValidUntil}
-                                </Col>
-                            
-                            </Row>
+                        </Row> */}
+
+                        {/* <Row gutter='30' align='middle' justify='left'>
+                            <Col>
+                            Value: {this.state.selectedPlayerDetails.Value}
+                            </Col>
+                            <Col>
+                            Release Clause: {this.state.selectedPlayerDetails.ReleaseClause}
+                            </Col>
+                            <Col>
+                            Wage: {this.state.selectedPlayerDetails.Wage}
+                            </Col>
+                            <Col>
+                            Contract Valid Until: {this.state.selectedPlayerDetails.ContractValidUntil}
+                            </Col>
+                        
+                        </Row> */}
+
                         </CardBody>
 
                     </Card>
 
                     <Card style={{marginTop: '2vh'}}>
                         <CardBody>
-                            <Row gutter='30' align='middle' justify='center'>
+                        <Table onRow={(record, rowIndex) => {
+                            return {
+                            // onClick: event => {this.goToMatch(record.MatchId)}, // clicking a row takes the user to a detailed view of the artwork in the /artworks page using the Id parameter  
+                            };
+                            }} 
+                            dataSource={this.state.selectedArtistWorks} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}>
+                                
+                                <Column title="Artwork Title" dataIndex="title" key="title" sorter= {(a, b) => a.title.localeCompare(b.title)}/>
+
+                                {/* <Column title="Nation" dataIndex="nation" key="nation" sorter= {(a, b) => a.nation.localeCompare(b.nation)}/> */}
+
+                                {/* <Column title="Artist" dataIndex="artist" key="artist" sorter= {(a, b) => a.artist.localeCompare(b.artist)}/> */}
+                                
+                                <Column title="BeginYear" dataIndex="beginYear" key="beginYear" sorter= {(a, b) => Number(a.beginYear)-Number(b.beginYear)}/>
+                                <Column title="FinishYear" dataIndex="endYear" key="endYear" sorter= {(a, b) => Number(a.endYear)-Number(b.endYear)}/>
+                                
+
+                            </Table>
+
+
+                            {/* <Row gutter='30' align='middle' justify='center'>
                             <Col flex={2} style={{ textAlign: 'left' }}>
                             <h6>Skill</h6>
                             <Rate disabled defaultValue={this.state.selectedPlayerDetails.Skill} />
@@ -279,7 +295,7 @@ class ArtistsPage extends React.Component {
                             />}
                                 
                                 </Col>
-                            </Row>
+                            </Row> */}
                         </CardBody>
                     </Card>
 
