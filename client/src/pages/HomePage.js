@@ -107,7 +107,7 @@ class HomePage extends React.Component {
           
           <Table onRow={(record, rowIndex) => {
           return {
-          // onClick: event => {this.goToMatch(record.MatchId)}, // clicking a row takes the user to a detailed view of the match in the /matches page using the MatchId parameter  
+          // onClick: event => {this.goToMatch(record.MatchId)}, // clicking a row takes the user to a detailed view of the artwork in the /artworks page using the Id parameter  
           };
           }} 
           dataSource={this.state.artworksResults} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}>
@@ -118,8 +118,8 @@ class HomePage extends React.Component {
 
               <Column title="Artist" dataIndex="artist" key="artist" sorter= {(a, b) => a.artist.localeCompare(b.artist)}/>
               
-              <Column title="BeginYear" dataIndex="beginYear" key="AwabeginYeary" sorter= {(a, b) => a.beginYear.localeCompare(b.beginYear)}/>
-              <Column title="FinishYear" dataIndex="endYear" key="endYear" sorter= {(a, b) => a.endYear.localeCompare(b.endYear)}/>
+              {/* <Column title="BeginYear" dataIndex="beginYear" key="beginYear" /> */}
+              {/* <Column title="FinishYear" dataIndex="endYear" key="endYear" /> */}
               
 
           </Table>
