@@ -302,8 +302,8 @@ async function search_matches(req, res) {
 
 }
 
-// Route 7 (handler) to do
-async function search_players(req, res) {
+// Route 7 (handler) done
+async function search_artists(req, res) {
     if(req.query.Name){
         var name='%'+req.query.Name+'%'
     }else{
@@ -316,33 +316,16 @@ async function search_players(req, res) {
         var nationality='%'
     }
 
-    if(req.query.Club){
-        var club='%'+req.query.Club+'%'
-    }else{
-        var club='%'
-    }
-
-    const ratingLow = req.query.RatingLow ? req.query.RatingLow : '0'
-    const ratingHigh = req.query.RatingHigh ? req.query.RatingHigh : '100'
-
-    const potentialLow = req.query.PotentialLow ? req.query.PotentialLow : '0'
-    const potentialHigh = req.query.PotentialHigh ? req.query.PotentialHigh : '100'
-
     const page = req.query.page
     const pagesize = req.query.pagesize ? req.query.pagesize : '10'
     const start=(page-1)*pagesize
 
     if (req.query.page && !isNaN(req.query.page)) {
-        connection.query(`SELECT PlayerId, Name, Nationality, OverallRating AS Rating, Potential, Club, Value
-            FROM Players
-            WHERE Name LIKE '${name}' and
-            Nationality LIKE '${nationality}' and
-            Club LIKE '${club}' and
-            OverallRating >= ${ratingLow} and
-            OverallRating <= ${ratingHigh} and
-            Potential >= ${potentialLow} and
-            Potential <= ${potentialHigh}
-            ORDER BY Name
+        connection.query(`SELECT constituentID, forwardDisplayName, nationality, constituentType
+            FROM constituents
+            WHERE forwardDisplayName LIKE '${name}' and
+            nationality LIKE '${nationality}'
+            ORDER BY constituentID
             LIMIT ${start},${pagesize}`, function (error, results, fields) {
                 if (error) {
                     var array=[]
@@ -355,16 +338,11 @@ async function search_players(req, res) {
 
     } else {
 
-        connection.query(`SELECT PlayerId, Name, Nationality, OverallRating AS Rating, Potential, Club, Value
-            FROM Players
-            WHERE Name LIKE '${name}' and
-            Nationality LIKE '${nationality}' and
-            Club LIKE '${club}' and
-            OverallRating >= ${ratingLow} and
-            OverallRating <= ${ratingHigh} and
-            Potential >= ${potentialLow} and
-            Potential <= ${potentialHigh}
-            ORDER BY Name`, function (error, results, fields) {
+        connection.query(`SELECT constituentID, forwardDisplayName, nationality, constituentType
+            FROM constituents
+            WHERE forwardDisplayName LIKE '${name}' and
+            nationality LIKE '${nationality}'
+            ORDER BY constituentID`, function (error, results, fields) {
                 if (error) {
                     var array=[]
                     res.json({results: array})
@@ -386,5 +364,5 @@ module.exports = {
     match,
     artist,
     search_matches,
-    search_players
+    search_artists
 }

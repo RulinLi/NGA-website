@@ -11,19 +11,18 @@ import {
     Slider,
     Rate 
 } from 'antd'
-import { RadarChart } from 'react-vis';
 import { format } from 'd3-format';
 
 
 
 
 import MenuBar from '../components/MenuBar';
-import { getPlayerSearch, getArtist } from '../fetcher'
+import { getArtistSearch, getArtist } from '../fetcher'
 const wideFormat = format('.3r');
 const { Column, ColumnGroup } = Table;
 
 
-const playerColumns = [
+const artistsColumns = [
     {
         title: 'Name',
         dataIndex: 'forwardDisplayName',
@@ -56,25 +55,18 @@ class ArtistsPage extends React.Component {
         this.state = {
             nameQuery: '',
             nationalityQuery: '',
-            clubQuery: '',
-            ratingHighQuery: 100,
-            ratingLowQuery: 0,
-            potHighQuery: 100,
-            potLowQuery: 0,
+
             //1783 is the constituentID of picasso
             selectedArtistId: window.location.search ? window.location.search.substring(1).split('=')[1] : 1783,
             selectedArtistDetails: null,
             selectedArtistWorks: [],
-            playersResults: []
+            artistsResults: []
 
         }
 
         this.updateSearchResults = this.updateSearchResults.bind(this)
         this.handleNameQueryChange = this.handleNameQueryChange.bind(this)
         this.handleNationalityQueryChange = this.handleNationalityQueryChange.bind(this)
-        this.handleClubQueryChange = this.handleClubQueryChange.bind(this)
-        this.handleRatingChange = this.handleRatingChange.bind(this)
-        this.handlePotentialChange = this.handlePotentialChange.bind(this)
     }
 
     
@@ -83,35 +75,21 @@ class ArtistsPage extends React.Component {
         this.setState({ nameQuery: event.target.value })
     }
 
-    handleClubQueryChange(event) {
-        this.setState({ clubQuery: event.target.value })
-    }
 
     handleNationalityQueryChange(event) {
         this.setState({ nationalityQuery: event.target.value })
     }
 
-    handleRatingChange(value) {
-        this.setState({ ratingLowQuery: value[0] })
-        this.setState({ ratingHighQuery: value[1] })
-    }
-
-    handlePotentialChange(value) {
-        this.setState({ potLowQuery: value[0] })
-        this.setState({ potHighQuery: value[1] })
-    }
-
-
 
     updateSearchResults() {
-        getPlayerSearch(this.state.nameQuery, this.state.nationalityQuery, this.state.clubQuery, this.state.ratingHighQuery, this.state.ratingLowQuery, this.state.potHighQuery, this.state.potLowQuery, null, null).then(res => {
-            this.setState({ playersResults: res.results })
+        getArtistSearch(this.state.nameQuery, this.state.nationalityQuery, null, null).then(res => {
+            this.setState({ artistsResults: res.results })
         })
     }
 
     componentDidMount() {
-        getPlayerSearch(this.state.nameQuery, this.state.nationalityQuery, this.state.clubQuery, this.state.ratingHighQuery, this.state.ratingLowQuery, this.state.potHighQuery, this.state.potLowQuery, null, null).then(res => {
-            this.setState({ playersResults: res.results })
+        getArtistSearch(this.state.nameQuery, this.state.nationalityQuery, null, null).then(res => {
+            this.setState({ artistsResults: res.results })
         })
 
         getArtist(this.state.selectedArtistId).then(res => {
@@ -126,7 +104,8 @@ class ArtistsPage extends React.Component {
             <div>
 
                 <MenuBar />
-                {/* <Form style={{ width: '80vw', margin: '0 auto', marginTop: '5vh' }}>
+                
+                <Form style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
                     <Row>
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
                             <label>Name</label>
@@ -136,35 +115,16 @@ class ArtistsPage extends React.Component {
                             <label>Nationality</label>
                             <FormInput placeholder="Nationality" value={this.state.nationalityQuery} onChange={this.handleNationalityQueryChange} />
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
-                            <label>Club</label>
-                            <FormInput placeholder="Club" value={this.state.clubQuery} onChange={this.handleClubQueryChange} />
+                        <Col flex={2}><FormGroup style={{ width: '5vw' }}>
+                            <Button style={{ marginTop: '4vh' }} onClick={this.updateSearchResults}>Search</Button>
                         </FormGroup></Col>
                     </Row>
                     <br></br>
-                    <Row>
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
-                            <label>Rating</label>
-                            <Slider range defaultValue={[50, 100]} onChange={this.handleRatingChange} />
-                        </FormGroup></Col>
-                        
-                        <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
-                            <label>PotentialRating</label>
-                            <Slider range defaultValue={[50, 100]} onChange={this.handlePotentialChange} />
-                        </FormGroup></Col>
-                        
-                        <Col flex={2}><FormGroup style={{ width: '10vw' }}>
-                            <Button style={{ marginTop: '4vh' }} onClick={this.updateSearchResults}>Search</Button>
-                        </FormGroup></Col>
-
-                    </Row>
-
-
-                </Form> */}
+                </Form>
                 
-                {/* <Divider />
-                <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}><Table dataSource={this.state.playersResults} columns={playerColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/></div>
-                <Divider /> */}
+                <Divider />
+                <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}><Table dataSource={this.state.artistsResults} columns={artistsColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/></div>
+                <Divider />
 
                 {this.state.selectedArtistDetails ? <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}>
                     <Card>
@@ -296,6 +256,7 @@ class ArtistsPage extends React.Component {
                                 
                                 </Col>
                             </Row> */}
+
                         </CardBody>
                     </Card>
 
