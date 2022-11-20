@@ -14,8 +14,8 @@ const getAllArtists = async (page, pagesize) => {
     return res.json()
 }
 
-const getMatch = async (id) => {
-    var res = await fetch(`http://${config.server_host}:${config.server_port}/match?id=${id}`, {
+const getArtworkDetail = async (artworkID) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/artworkDetail/${artworkID}`, {
         method: 'GET',
     })
     return res.json()
@@ -48,7 +48,7 @@ const getArtistSearch = async (name, nationality, page, pagesize) => {
 export {
     getAllArtworks,
     getAllArtists,
-    getMatch,
+    getArtworkDetail,
     getArtist,
     getMatchSearch,
     getArtistSearch

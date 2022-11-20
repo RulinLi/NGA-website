@@ -9,7 +9,7 @@ import {
     Col,
     Divider,
     Slider,
-    Rate 
+    Rate
 } from 'antd'
 import { format } from 'd3-format';
 
@@ -43,7 +43,7 @@ const artistsColumns = [
         dataIndex: 'constituentType',
         key: 'constituentType',
         sorter: (a, b) => a.constituentType.localeCompare(b.constituentType)
-        
+
     }
 
 ];
@@ -69,7 +69,7 @@ class ArtistsPage extends React.Component {
         this.handleNationalityQueryChange = this.handleNationalityQueryChange.bind(this)
     }
 
-    
+
 
     handleNameQueryChange(event) {
         this.setState({ nameQuery: event.target.value })
@@ -96,6 +96,9 @@ class ArtistsPage extends React.Component {
             this.setState({ selectedArtistDetails: res.results[0] })
             this.setState({ selectedArtistWorks: res.results })
         })
+
+
+
     }
 
     render() {
@@ -104,7 +107,7 @@ class ArtistsPage extends React.Component {
             <div>
 
                 <MenuBar />
-                
+
                 <Form style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
                     <Row>
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' }}>
@@ -121,29 +124,29 @@ class ArtistsPage extends React.Component {
                     </Row>
                     <br></br>
                 </Form>
-                
+
                 <Divider />
-                <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}><Table dataSource={this.state.artistsResults} columns={artistsColumns} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}/></div>
+                <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}><Table dataSource={this.state.artistsResults} columns={artistsColumns} pagination={{ pageSizeOptions: [5, 10], defaultPageSize: 5, showQuickJumper: true }} /></div>
                 <Divider />
 
                 {this.state.selectedArtistDetails ? <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}>
                     <Card>
-                    
+
                         <CardBody>
-                        <Row gutter='30' align='middle' justify='center'>
-                            <Col flex={2} style={{ textAlign: 'left' }}>
-                            <h3>Artist Name: {this.state.selectedArtistDetails.name}</h3>
+                            <Row gutter='30' align='middle' justify='center'>
+                                <Col flex={2} style={{ textAlign: 'left' }}>
+                                    <h3>Artist Name: {this.state.selectedArtistDetails.name}</h3>
 
-                            </Col>
+                                </Col>
 
-                            <Col flex={2} style={{ textAlign: 'middle' }}>
-                            <h3>Nation: {this.state.selectedArtistDetails.nationality}</h3>
-                            </Col>
-                        </Row>
-                       
-                        {/* <br>
+                                <Col flex={2} style={{ textAlign: 'middle' }}>
+                                    <h3>Nation: {this.state.selectedArtistDetails.nationality}</h3>
+                                </Col>
+                            </Row>
+
+                            {/* <br>
                         </br> */}
-                        {/* <Row gutter='30' align='middle' justify='left'>
+                            {/* <Row gutter='30' align='middle' justify='left'>
                             <Col>
                             Age: {this.state.selectedPlayerDetails.Age}
                             </Col>
@@ -161,7 +164,7 @@ class ArtistsPage extends React.Component {
 
                         </Row> */}
 
-                        {/* <Row gutter='30' align='middle' justify='left'>
+                            {/* <Row gutter='30' align='middle' justify='left'>
                             <Col>
                             Value: {this.state.selectedPlayerDetails.Value}
                             </Col>
@@ -181,24 +184,24 @@ class ArtistsPage extends React.Component {
 
                     </Card>
 
-                    <Card style={{marginTop: '2vh'}}>
+                    <Card style={{ marginTop: '2vh' }}>
                         <CardBody>
-                        <Table onRow={(record, rowIndex) => {
-                            return {
-                            // onClick: event => {this.goToMatch(record.MatchId)}, // clicking a row takes the user to a detailed view of the artwork in the /artworks page using the Id parameter  
-                            };
-                            }} 
-                            dataSource={this.state.selectedArtistWorks} pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }}>
-                                
-                                <Column title="Artwork Title" dataIndex="title" key="title" sorter= {(a, b) => a.title.localeCompare(b.title)}/>
+                            <Table onRow={(record, rowIndex) => {
+                                return {
+                                    // onClick: event => {this.goToMatch(record.MatchId)}, // clicking a row takes the user to a detailed view of the artwork in the /artworks page using the Id parameter  
+                                };
+                            }}
+                                dataSource={this.state.selectedArtistWorks} pagination={{ pageSizeOptions: [5, 10], defaultPageSize: 5, showQuickJumper: true }}>
+
+                                <Column title="Artwork Title" dataIndex="title" key="title" sorter={(a, b) => a.title.localeCompare(b.title)} render={(text, row) => <a href={`/artworks?id=${row.artID}`}>{text} </a>} />
 
                                 {/* <Column title="Nation" dataIndex="nation" key="nation" sorter= {(a, b) => a.nation.localeCompare(b.nation)}/> */}
 
                                 {/* <Column title="Artist" dataIndex="artist" key="artist" sorter= {(a, b) => a.artist.localeCompare(b.artist)}/> */}
-                                
-                                <Column title="BeginYear" dataIndex="beginYear" key="beginYear" sorter= {(a, b) => Number(a.beginYear)-Number(b.beginYear)}/>
-                                <Column title="FinishYear" dataIndex="endYear" key="endYear" sorter= {(a, b) => Number(a.endYear)-Number(b.endYear)}/>
-                                
+
+                                <Column title="BeginYear" dataIndex="beginYear" key="beginYear" sorter={(a, b) => Number(a.beginYear) - Number(b.beginYear)} />
+                                <Column title="FinishYear" dataIndex="endYear" key="endYear" sorter={(a, b) => Number(a.endYear) - Number(b.endYear)} />
+
 
                             </Table>
 

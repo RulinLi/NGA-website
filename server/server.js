@@ -21,12 +21,12 @@ app.get('/artworks/:classification', routes.all_artworks)
 app.get('/artists', routes.all_artists)
 
 // Route 4 - register as GET 
-app.get('/match', routes.match)
+app.get('/artworkDetail/:artworkID', routes.artworkDetail)
 
 // Route 5 - register as GET 
 app.get('/artist', routes.artist)
 
-// Route 6 - register as GET 
+// Route 6 - register as GET //haven't change yet
 app.get('/search/matches', routes.search_matches)
 
 // Route 7 - register as GET 
