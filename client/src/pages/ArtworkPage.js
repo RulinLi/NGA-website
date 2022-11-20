@@ -147,18 +147,6 @@ class ArtworkPage extends React.Component {
                 <Divider />
                 <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}>
                     <h3>Artworks</h3>
-                    <Select defaultValue="painting" style={{ width: 120 }} onChange={this.classificationOnChange}>
-                        <Option value="painting">painting</Option>
-                        <Option value="sculpture">sculpture</Option>
-                        <Option value="drawing">drawing</Option>
-                        <Option value="print">print</Option>
-                        <Option value="decorative art">decorative art</Option>
-                        <Option value="volume">volume</Option>
-                        <Option value="portfolio">portfolio</Option>
-                        <Option value="technical material">technical material</Option>
-                        <Option value="photograph">photograph</Option>
-                        <Option value="new media">new media</Option>
-                    </Select>
 
                     <Table onRow={(record, rowIndex) => {
                         return {
@@ -167,7 +155,6 @@ class ArtworkPage extends React.Component {
                     }}
                         dataSource={this.state.artworksResults} pagination={{ pageSizeOptions: [5, 10], defaultPageSize: 5, showQuickJumper: true }} columns={this.artworksColumns}  >
 
-
                     </Table>
 
                 </div>
@@ -175,7 +162,8 @@ class ArtworkPage extends React.Component {
                 <Divider />
                 {this.state.selectedArtworkDetails ? <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}>
                     <Row>
-                        <Col span={15}>
+                        {/* artwork specific display can be changed here */}
+                        <Col span={4}>
                             <Card
                                 style={{ width: '100%' }}
                                 cover={
@@ -191,7 +179,7 @@ class ArtworkPage extends React.Component {
                         <Col span={1}></Col>
                         <Col span={8}>
                             <Descriptions title={this.state.selectedArtworkDetails.title} bordered column={1}>
-                                <Descriptions.Item label="Title">{this.state.selectedArtworkDetails.title}</Descriptions.Item>
+                                {/* <Descriptions.Item label="Title">{this.state.selectedArtworkDetails.title}</Descriptions.Item> */}
                                 <Descriptions.Item label="Artist">{this.state.selectedArtworkDetails.artist}</Descriptions.Item>
                                 <Descriptions.Item label="Location">{this.state.selectedArtworkDetails.location ? this.state.selectedArtworkDetails.location : 'Currently Not In Display'}</Descriptions.Item>
                                 <Descriptions.Item label="TimeSpan">{this.state.selectedArtworkDetails.visualBrowserTimeSpan}</Descriptions.Item>
@@ -199,10 +187,11 @@ class ArtworkPage extends React.Component {
                             </Descriptions>
                         </Col>
                     </Row>
-                </div> : null}
+                </div> : null
+                }
                 <Divider />
 
-            </div>
+            </div >
         )
     }
 }
