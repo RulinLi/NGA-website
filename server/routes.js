@@ -111,7 +111,7 @@ async function artworkDetail(req, res) {
     // const pagesize = req.query.pagesize ? req.query.pagesize : '10'
     // const start = (page - 1) * pagesize
 
-    var sqlStatement = `select DISTINCT o.objectID, o.visualBrowserClassification as classification, c.forwardDisplayName as artist, c.constituentID, im.iiifThumbURL, l.detail as location, o.visualBrowserTimeSpan, o.creditLine
+    var sqlStatement = `select DISTINCT o.objectID, o.title, o.visualBrowserClassification as classification, c.forwardDisplayName as artist, c.constituentID, im.iiifThumbURL, l.detail as location, o.visualBrowserTimeSpan, o.creditLine
     from objects o join objects_constituents oc on o.objectID = oc.objectID join constituents c on c.constituentID = oc.constituentID join published_images im on im.depictstmsobjectid = o.objectID left outer join locations l on l.locationID = o.locationID
     where o.objectID = ${artworkID} and oc.roleType='artist'`
 

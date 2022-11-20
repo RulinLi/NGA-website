@@ -191,6 +191,7 @@ class ArtworkPage extends React.Component {
                         <Col span={1}></Col>
                         <Col span={8}>
                             <Descriptions title={this.state.selectedArtworkDetails.title} bordered column={1}>
+                                <Descriptions.Item label="Title">{this.state.selectedArtworkDetails.title}</Descriptions.Item>
                                 <Descriptions.Item label="Artist">{this.state.selectedArtworkDetails.artist}</Descriptions.Item>
                                 <Descriptions.Item label="Location">{this.state.selectedArtworkDetails.location ? this.state.selectedArtworkDetails.location : 'Currently Not In Display'}</Descriptions.Item>
                                 <Descriptions.Item label="TimeSpan">{this.state.selectedArtworkDetails.visualBrowserTimeSpan}</Descriptions.Item>
