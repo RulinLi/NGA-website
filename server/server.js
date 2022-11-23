@@ -27,7 +27,7 @@ app.get('/artworkDetail/:artworkID', routes.artworkDetail)
 app.get('/artist', routes.artist)
 
 // Route 6 - register as GET //haven't change yet
-app.get('/search/matches', routes.search_matches)
+app.get('/search/artworks', routes.search_artworks)
 
 // Route 7 - register as GET 
 app.get('/search/artists', routes.search_artists)

@@ -30,7 +30,7 @@ async function all_artworks(req, res) {
     const start = (page - 1) * pagesize
 
     if (req.query.page && !isNaN(req.query.page)) {
-        connection.query(`select DISTINCT o.objectID, o.title as title, o.visualBrowserClassification as classification, o.beginYear as beginYear,o.endYear as endYear, c.forwardDisplayName as artist, c.nationality as nation, c.constituentID, im.iiifThumbURL
+        connection.query(`select DISTINCT o.objectID, o.title as title, o.visualBrowserClassification, o.visualBrowserTimeSpan, o.beginYear as beginYear,o.endYear as endYear, c.forwardDisplayName as artist, c.nationality as nation, c.constituentID, im.iiifThumbURL
         from objects o join objects_constituents oc on o.objectID = oc.objectID join constituents c on c.constituentID = oc.constituentID join published_images im on im.depictstmsobjectid = o.objectID
         where oc.roleType='artist' and o.visualBrowserClassification='${classification}' 
         order by o.title
@@ -46,7 +46,7 @@ async function all_artworks(req, res) {
 
 
     } else {
-        connection.query(`select DISTINCT o.objectID, o.title as title, o.visualBrowserClassification as classification, o.beginYear as beginYear,o.endYear as endYear, c.forwardDisplayName as artist, c.nationality as nation, c.constituentID, im.iiifThumbURL
+        connection.query(`select DISTINCT o.objectID, o.title as title, o.visualBrowserClassification, o.visualBrowserTimeSpan, o.beginYear as beginYear,o.endYear as endYear, c.forwardDisplayName as artist, c.nationality as nation, c.constituentID, im.iiifThumbURL
         from objects o join objects_constituents oc on o.objectID = oc.objectID join constituents c on c.constituentID = oc.constituentID join published_images im on im.depictstmsobjectid = o.objectID
         where oc.roleType='artist' and o.visualBrowserClassification='${classification}' 
         order by o.title`, function (error, results, fields) {
@@ -111,8 +111,18 @@ async function artworkDetail(req, res) {
     // const pagesize = req.query.pagesize ? req.query.pagesize : '10'
     // const start = (page - 1) * pagesize
 
-    var sqlStatement = `select DISTINCT o.objectID, o.title, o.visualBrowserClassification as classification, c.forwardDisplayName as artist, c.constituentID, im.iiifThumbURL, l.detail as location, o.visualBrowserTimeSpan, o.creditLine
-    from objects o join objects_constituents oc on o.objectID = oc.objectID join constituents c on c.constituentID = oc.constituentID join published_images im on im.depictstmsobjectid = o.objectID left outer join locations l on l.locationID = o.locationID
+    var sqlStatement = `select DISTINCT o.objectID, o.title, o.visualBrowserClassification as classification, c.forwardDisplayName as artist, c.constituentID, 
+    concat(substring(im.iiifThumbURL, 1, position('!' in im.iiifThumbURL)), '400,400', '/0/default.jpg') as iiifThumbURL, 
+    l.detail as location, o.visualBrowserTimeSpan, o.creditLine, o.beginYear, o.endYear,
+    case when o.provenanceText like '%[1]%' then substring(o.provenanceText, 1, position('[1]' in o.provenanceText)) 
+    when o.provenanceText is null then 'N/A'
+    else o.provenanceText 
+    end as provenanceText
+    from objects o 
+    join objects_constituents oc on o.objectID = oc.objectID 
+    join constituents c on c.constituentID = oc.constituentID 
+    join published_images im on im.depictstmsobjectid = o.objectID 
+    left outer join locations l on l.locationID = o.locationID
     where o.objectID = ${artworkID} and oc.roleType='artist'`
 
     console.log(sqlStatement)
@@ -170,22 +180,33 @@ async function artist(req, res) {
 // ********************************************
 
 // Route 6 (handler) to do
-async function search_matches(req, res) {
-    const home = req.query.Home
-    const away = req.query.Away
+async function search_artworks(req, res) {
+    const title = req.query.Title
+    const artist = req.query.Artist
     const page = req.query.page
     const pagesize = req.query.pagesize ? req.query.pagesize : '10'
     const start = (page - 1) * pagesize
+    const classification = req.params.Classification ? req.params.Classification : 'painting'
+    const timespan = req.params.Timespan ? req.params.Timespan : '2001 to present'
 
     if (req.query.page && !isNaN(req.query.page)) {
-        if (req.query.Home && req.query.Away) {
-            var home_conct = '%' + home + '%'
-            var away_conct = '%' + away + '%'
-            connection.query(`SELECT MatchId, Date, Time, HomeTeam AS Home, AwayTeam AS Away, FullTimeGoalsH AS HomeGoals, FullTimeGoalsA AS AwayGoals
-            FROM Matches  
-            WHERE HomeTeam LIKE '${home_conct}' and AwayTeam LIKE '${away_conct}'
-            ORDER BY HomeTeam, AwayTeam
-            LIMIT ${start},${pagesize}`, function (error, results, fields) {
+        if (req.query.Title && req.query.Artist) {
+            var title_conct = '%' + title + '%'
+            var artist_conct = '%' + artist + '%'
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            from objects o
+            join objects_constituents oc on o.objectID = oc.objectID
+            join constituents c on c.constituentID = oc.constituentID
+            join published_images im on im.depictstmsobjectid = o.objectID
+            where oc.roleType='artist'
+            and o.title like ?
+            and c.forwardDisplayName like ?
+            and o.visualBrowserClassification = ?
+            and o.visualBrowserTimeSpan = ?
+            order by o.title
+            LIMIT ?, ?`
+            
+            connection.query(sql, [title_conct, artist_conct, classification, timespan, start, pagesize], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -193,13 +214,20 @@ async function search_matches(req, res) {
                     res.json({ results: results })
                 }
             });
-        } else if (req.query.Home && !req.query.Away) {
-            var home_conct = '%' + home + '%'
-            connection.query(`SELECT MatchId, Date, Time, HomeTeam AS Home, AwayTeam AS Away, FullTimeGoalsH AS HomeGoals, FullTimeGoalsA AS AwayGoals
-            FROM Matches  
-            WHERE HomeTeam LIKE '${home_conct}'
-            ORDER BY HomeTeam, AwayTeam
-            LIMIT ${start},${pagesize}`, function (error, results, fields) {
+        } else if (req.query.Title && !req.query.Artist) {
+            var title_conct = '%' + title + '%'
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            from objects o
+            join objects_constituents oc on o.objectID = oc.objectID
+            join constituents c on c.constituentID = oc.constituentID
+            join published_images im on im.depictstmsobjectid = o.objectID
+            where oc.roleType='artist'
+            and o.title like ?
+            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?
+            ORDER BY c.forwardDisplayName
+            LIMIT ?, ?`
+
+            connection.query(sql, [title_conct, classification, timespan, start, pagesize], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -207,13 +235,20 @@ async function search_matches(req, res) {
                     res.json({ results: results })
                 }
             });
-        } else if (!req.query.Home && req.query.Away) {
-            var away_conct = '%' + away + '%'
-            connection.query(`SELECT MatchId, Date, Time, HomeTeam AS Home, AwayTeam AS Away, FullTimeGoalsH AS HomeGoals, FullTimeGoalsA AS AwayGoals
-            FROM Matches  
-            WHERE AwayTeam LIKE '${away_conct}'
-            ORDER BY HomeTeam, AwayTeam
-            LIMIT ${start},${pagesize}`, function (error, results, fields) {
+        } else if (!req.query.Title && req.query.Artist) {
+            var artist_conct = '%' + artist + '%'
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            from objects o
+            join objects_constituents oc on o.objectID = oc.objectID
+            join constituents c on c.constituentID = oc.constituentID
+            join published_images im on im.depictstmsobjectid = o.objectID
+            where oc.roleType='artist'
+            and c.forwardDisplayName like ?
+            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?
+            ORDER BY o.title
+            LIMIT ?,?`
+            
+            connection.query(sql, [artist_conct, classification, timespan, start, pagesize], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -222,10 +257,17 @@ async function search_matches(req, res) {
                 }
             });
         } else {
-            connection.query(`SELECT MatchId, Date, Time, HomeTeam AS Home, AwayTeam AS Away, FullTimeGoalsH AS HomeGoals, FullTimeGoalsA AS AwayGoals
-            FROM Matches
-            ORDER BY HomeTeam, AwayTeam
-            LIMIT ${start},${pagesize}`, function (error, results, fields) {
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            from objects o
+            join objects_constituents oc on o.objectID = oc.objectID
+            join constituents c on c.constituentID = oc.constituentID
+            join published_images im on im.depictstmsobjectid = o.objectID
+            where oc.roleType='artist'
+            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?
+            order by o.title, c.forwardDisplayName
+            LIMIT ?, ?`
+            
+            connection.query(sql, [classification, timespan, start, pagesize], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -237,13 +279,20 @@ async function search_matches(req, res) {
 
 
     } else {
-        if (req.query.Home && req.query.Away) {
-            var home_conct = '%' + home + '%'
-            var away_conct = '%' + away + '%'
-            connection.query(`SELECT MatchId, Date, Time, HomeTeam AS Home, AwayTeam AS Away, FullTimeGoalsH AS HomeGoals, FullTimeGoalsA AS AwayGoals
-            FROM Matches  
-            WHERE HomeTeam LIKE '${home_conct}' and AwayTeam LIKE '${away_conct}'
-            ORDER BY HomeTeam, AwayTeam`, function (error, results, fields) {
+        if (req.query.Title && req.query.Artist) {
+            var title_conct = '%' + title + '%'
+            var artist_conct = '%' + artist + '%'
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            from objects o
+            join objects_constituents oc on o.objectID = oc.objectID
+            join constituents c on c.constituentID = oc.constituentID
+            join published_images im on im.depictstmsobjectid = o.objectID
+            where oc.roleType='artist'
+            and o.title like ?
+            and c.forwardDisplayName like ?
+            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?`
+            
+            connection.query(sql, [title_conct, artist_conct, classification, timespan], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -251,12 +300,19 @@ async function search_matches(req, res) {
                     res.json({ results: results })
                 }
             });
-        } else if (req.query.Home && !req.query.Away) {
-            var home_conct = '%' + home + '%'
-            connection.query(`SELECT MatchId, Date, Time, HomeTeam AS Home, AwayTeam AS Away, FullTimeGoalsH AS HomeGoals, FullTimeGoalsA AS AwayGoals
-            FROM Matches  
-            WHERE HomeTeam LIKE '${home_conct}'
-            ORDER BY HomeTeam, AwayTeam`, function (error, results, fields) {
+        } else if (req.query.Title && !req.query.Artist) {
+            var title_conct = '%' + title + '%'
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            from objects o
+            join objects_constituents oc on o.objectID = oc.objectID
+            join constituents c on c.constituentID = oc.constituentID
+            join published_images im on im.depictstmsobjectid = o.objectID
+            where oc.roleType='artist'
+            and o.title like ?
+            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?
+            order by c.forwardDisplayName`
+            
+            connection.query(sql, [title_conct, classification, timespan], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -264,12 +320,19 @@ async function search_matches(req, res) {
                     res.json({ results: results })
                 }
             });
-        } else if (!req.query.Home && req.query.Away) {
-            var away_conct = '%' + away + '%'
-            connection.query(`SELECT MatchId, Date, Time, HomeTeam AS Home, AwayTeam AS Away, FullTimeGoalsH AS HomeGoals, FullTimeGoalsA AS AwayGoals
-            FROM Matches  
-            WHERE AwayTeam LIKE '${away_conct}'
-            ORDER BY HomeTeam, AwayTeam`, function (error, results, fields) {
+        } else if (!req.query.Title && req.query.Artist) {
+            var artist_conct = '%' + artist + '%'
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            from objects o
+            join objects_constituents oc on o.objectID = oc.objectID
+            join constituents c on c.constituentID = oc.constituentID
+            join published_images im on im.depictstmsobjectid = o.objectID
+            where oc.roleType='artist'
+            and c.forwardDisplayName like ?
+            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?
+            order by o.title`
+            
+            connection.query(sql, [artist_conct, classification, timespan], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -278,9 +341,16 @@ async function search_matches(req, res) {
                 }
             });
         } else {
-            connection.query(`SELECT MatchId, Date, Time, HomeTeam AS Home, AwayTeam AS Away, FullTimeGoalsH AS HomeGoals, FullTimeGoalsA AS AwayGoals
-            FROM Matches
-            ORDER BY HomeTeam, AwayTeam`, function (error, results, fields) {
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            from objects o
+            join objects_constituents oc on o.objectID = oc.objectID
+            join constituents c on c.constituentID = oc.constituentID
+            join published_images im on im.depictstmsobjectid = o.objectID
+            where oc.roleType='artist'
+            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?
+            ORDER BY o.title, c.forwardDisplayName`
+            
+            connection.query(sql, [classification, timespan], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -349,12 +419,18 @@ async function search_artists(req, res) {
 
 }
 
+
+
+
+
+
+
 module.exports = {
     hello,
     all_artworks,
     all_artists,
     artworkDetail: artworkDetail,
     artist,
-    search_matches,
+    search_artworks,
     search_artists
 }
