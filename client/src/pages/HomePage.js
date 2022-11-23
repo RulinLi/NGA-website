@@ -93,6 +93,7 @@ class HomePage extends React.Component {
 
         <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}>
           <h3>Artworks</h3>
+        
           <Select defaultValue="painting" style={{ width: 120 }} onChange={this.classificationOnChange}>
             <Option value="painting">painting</Option>
             <Option value="sculpture">sculpture</Option>
@@ -105,6 +106,7 @@ class HomePage extends React.Component {
             <Option value="photograph">photograph</Option>
             <Option value="new media">new media</Option>
           </Select>
+        
 
           <Table onRow={(record, rowIndex) => {
             return {
