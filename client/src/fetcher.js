@@ -42,8 +42,8 @@ const getArtistSearch = async (name, nationality, page, pagesize) => {
     return res.json()
 }
 
-const getArtworkSearch = async (title, artist, classification, timespan, page, pagesize) => {
-    var res = await fetch(`http://${config.server_host}:${config.server_port}/search/artworks?Title=${title}&Artist=${artist}&Classification=${classification}&Timespan=${timespan}&page=${page}&pagesize=${pagesize}`, {
+const getArtworkSearch = async (title, artist, beginYear, endYear, page, pagesize) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/search/artworks?Title=${title}&Artist=${artist}&BeginYear=${beginYear}&EndYear=${endYear}&page=${page}&pagesize=${pagesize}`, {
         method: 'GET',
     })
     return res.json()

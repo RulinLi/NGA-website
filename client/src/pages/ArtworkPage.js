@@ -31,8 +31,8 @@ class ArtworkPage extends React.Component {
         this.state = {
             artworkQuery: '',
             artistnameQuery: '',
-            typeQuery: '', 
-            timeSpanQuery: '',
+            beginYearQuery: '', 
+            endYearQuery: '',
 
             artworksResults: [],
             artworksPageNumber: 1,
@@ -45,12 +45,12 @@ class ArtworkPage extends React.Component {
         }
 
         this.updateSearchResults = this.updateSearchResults.bind(this)
-        //this.classificationOnChange = this.classificationOnChange.bind(this)
         this.updateArtworkDetail = this.updateArtworkDetail.bind(this)
         this.handleArtistNameChange = this.handleArtistNameChange.bind(this)
         this.handleArtworkQueryChange = this.handleArtworkQueryChange.bind(this)
-        this.handleTypeChange = this.handleTypeChange.bind(this)
-        this.handleTimeSpanChange = this.handleTimeSpanChange.bind(this)
+        this.handleBeginYearChange = this.handleBeginYearChange.bind(this)
+        this.handleEndYearChange = this.handleEndYearChange.bind(this)
+        
     
 
     }
@@ -102,12 +102,12 @@ class ArtworkPage extends React.Component {
         this.setState({ artistnameQuery: event.target.value })
     }
 
-    handleTypeChange(value) {
-        this.setState({ typeQuery: value })
+    handleBeginYearChange(event) {
+        this.setState({ beginYearQuery: event.target.value })
     }
 
-    handleTimeSpanChange(value) {
-        this.setState({ timeSpanQuery: value })
+    handleEndYearChange(event) {
+        this.setState({ endYearQuery: event.target.value })
     }
 
 
@@ -124,7 +124,7 @@ class ArtworkPage extends React.Component {
     }
 
     updateSearchResults() {
-        getArtworkSearch(this.state.artworkQuery, this.state.artistnameQuery, this.state.typeQuery, this.state.timespanQuery, null, null).then(res => {
+        getArtworkSearch(this.state.artworkQuery, this.state.artistnameQuery, this.state.beginYearQuery, this.state.endYearQuery, null, null).then(res => {
             this.setState({ artworksResults: res.results })
         })
 
@@ -138,7 +138,7 @@ class ArtworkPage extends React.Component {
 
     componentDidMount() {
 
-        getArtworkSearch(this.state.artworkQuery, this.state.artistnameQuery, this.state.typeQuery, this.state.timespanQuery, null, null).then(res => {
+        getArtworkSearch(this.state.artworkQuery, this.state.artistnameQuery, this.state.beginYearQuery, this.state.endYearQuery, null, null).then(res => {
             this.setState({ artworksResults: res.results })
         })
 
@@ -179,59 +179,25 @@ class ArtworkPage extends React.Component {
                             <FormInput placeholder="Artist" value={this.state.artistnameQuery} onChange={this.handleArtistNameChange} />
                         </FormGroup></Col>
                         <Col flex={2}><FormGroup style={{ width: '10vw' }}>
-                            <Button style={{ marginTop: '4vh', width: '10vw' }} onClick={this.updateSearchResults}>Search</Button>
                         </FormGroup></Col>
 
                     </Row>
 
                     <Row>
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' , marginTop: '2vh', marginBottom: '2vh'}}>
-                            <label>Type</label>
-                            <br/>
+                            <label>Begin Year</label>
                             {/* need to change based on discussion of search on Artwork page */}
-                            <Select defaultValue="painting" style={{ width: '20vw' }} onChange={value => {this.handleTypeChange(value)}}>
-                                <Option value="painting">painting</Option>
-                                <Option value="sculpture">sculpture</Option>
-                                <Option value="drawing">drawing</Option>
-                                <Option value="print">print</Option>
-                                <Option value="decorative art">decorative art</Option>
-                                <Option value="volume">volume</Option>
-                                <Option value="portfolio">portfolio</Option>
-                                <Option value="technical material">technical material</Option>
-                                <Option value="photograph">photograph</Option>
-                                <Option value="new media">new media</Option>
-                            </Select>
+                            <FormInput placeholder="Begin Year" value={this.state.beginYearQuery} onChange={this.handleBeginYearChange} />
                         </FormGroup></Col>
 
                         <Col flex={2}><FormGroup style={{ width: '20vw', margin: '0 auto' , marginTop: '2vh', marginBottom: '2vh'}}>
-                            <label>Time Span</label>
-                            <br/>
+                            <label>End Year</label>
                             {/* need to change based on discussion of search on Artwork page */}
-                            <Select defaultValue="2001 to present" style={{ width: '20vw' }} onChange={value => {this.handleTimeSpanChange(value)}}>
-                                <Option value="before 1300">before 1300</Option>
-                                <Option value="1300 to 1400">1300 to 1400</Option>
-                                <Option value="1401 to 1500">1401 to 1500</Option>
-                                <Option value="1501 to 1550">1501 to 1550</Option>
-                                <Option value="1551 to 1600">1551 to 1600</Option>
-                                <Option value="1601 to 1650">1601 to 1650</Option>
-                                <Option value="1651 to 1700">1651 to 1700</Option>
-                                <Option value="1701 to 1725">1701 to 1725</Option>
-                                <Option value="1726 to 1750">1726 to 1750</Option>
-                                <Option value="1751 to 1775">1751 to 1775</Option>
-                                <Option value="1776 to 1800">1776 to 1800</Option>
-                                <Option value="1801 to 1825">1801 to 1825</Option>
-                                <Option value="1826 to 1850">1826 to 1850</Option>
-                                <Option value="1851 to 1875">1851 to 1875</Option>
-                                <Option value="1876 to 1900">1876 to 1900</Option>
-                                <Option value="1901 to 1925">1901 to 1925</Option>
-                                <Option value="1926 to 1950">1926 to 1950</Option>
-                                <Option value="1951 to 1975">1951 to 1975</Option>
-                                <Option value="1976 to 2000">1976 to 2000</Option>
-                                <Option value="2001 to present">2001 to present</Option>                            
-                            </Select>
+                            <FormInput placeholder="End Year" value={this.state.endYearQuery} onChange={this.handleEndYearChange} />
+                            
                         </FormGroup></Col>
-                        <Col flex={2}><FormGroup style={{ width: '10vw' }}>
-                            <Button style={{ marginTop: '4vh' , width: '10vw'}} onClick={this.updateSearchResults}>Filter</Button>
+                        <Col flex={2}><FormGroup style={{ width: '10vw'}}>
+                            <Button style={{ marginTop: '1vh' , width: '10vw'}} onClick={this.updateSearchResults}>Search</Button>
                         </FormGroup></Col>
 
                     </Row>

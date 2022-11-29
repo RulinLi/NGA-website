@@ -22,6 +22,7 @@ async function hello(req, res) {
     }
 }
 
+
 // Route 2 (handler) done
 async function all_artworks(req, res) {
     const classification = req.params.classification ? req.params.classification : 'painting'
@@ -186,14 +187,14 @@ async function search_artworks(req, res) {
     const page = req.query.page
     const pagesize = req.query.pagesize ? req.query.pagesize : '10'
     const start = (page - 1) * pagesize
-    const classification = req.params.Classification ? req.params.Classification : 'painting'
-    const timespan = req.params.Timespan ? req.params.Timespan : '2001 to present'
+    const beginyear = req.query.BeginYear ? req.query.BeginYear : 0
+    const endyear = req.query.EndYear ? req.query.EndYear : 2022
 
     if (req.query.page && !isNaN(req.query.page)) {
         if (req.query.Title && req.query.Artist) {
             var title_conct = '%' + title + '%'
             var artist_conct = '%' + artist + '%'
-            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan, o.beginYear, o.endYear
             from objects o
             join objects_constituents oc on o.objectID = oc.objectID
             join constituents c on c.constituentID = oc.constituentID
@@ -201,12 +202,12 @@ async function search_artworks(req, res) {
             where oc.roleType='artist'
             and o.title like ?
             and c.forwardDisplayName like ?
-            and o.visualBrowserClassification = ?
-            and o.visualBrowserTimeSpan = ?
+            and o.beginYear > ?
+            and o.endYear < ?
             order by o.title
             LIMIT ?, ?`
             
-            connection.query(sql, [title_conct, artist_conct, classification, timespan, start, pagesize], function (error, results, fields) {
+            connection.query(sql, [title_conct, artist_conct, beginyear, endyear, start, pagesize], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -216,18 +217,19 @@ async function search_artworks(req, res) {
             });
         } else if (req.query.Title && !req.query.Artist) {
             var title_conct = '%' + title + '%'
-            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan, o.beginYear, o.endYear
             from objects o
             join objects_constituents oc on o.objectID = oc.objectID
             join constituents c on c.constituentID = oc.constituentID
             join published_images im on im.depictstmsobjectid = o.objectID
             where oc.roleType='artist'
             and o.title like ?
-            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?
-            ORDER BY c.forwardDisplayName
+            and o.beginYear > ?
+            and o.endYear < ?
+            ORDER BY o.title, c.forwardDisplayName
             LIMIT ?, ?`
 
-            connection.query(sql, [title_conct, classification, timespan, start, pagesize], function (error, results, fields) {
+            connection.query(sql, [title_conct, beginyear, endyear, start, pagesize], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -237,18 +239,19 @@ async function search_artworks(req, res) {
             });
         } else if (!req.query.Title && req.query.Artist) {
             var artist_conct = '%' + artist + '%'
-            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan, o.beginYear, o.endYear
             from objects o
             join objects_constituents oc on o.objectID = oc.objectID
             join constituents c on c.constituentID = oc.constituentID
             join published_images im on im.depictstmsobjectid = o.objectID
             where oc.roleType='artist'
             and c.forwardDisplayName like ?
-            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?
+            and o.beginYear > ?
+            and o.endYear < ?
             ORDER BY o.title
             LIMIT ?,?`
             
-            connection.query(sql, [artist_conct, classification, timespan, start, pagesize], function (error, results, fields) {
+            connection.query(sql, [artist_conct, beginyear, endyear, start, pagesize], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -257,17 +260,18 @@ async function search_artworks(req, res) {
                 }
             });
         } else {
-            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan, o.beginYear, o.endYear
             from objects o
             join objects_constituents oc on o.objectID = oc.objectID
             join constituents c on c.constituentID = oc.constituentID
             join published_images im on im.depictstmsobjectid = o.objectID
             where oc.roleType='artist'
-            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?
+            and o.beginYear > ?
+            and o.endYear < ?
             order by o.title, c.forwardDisplayName
             LIMIT ?, ?`
             
-            connection.query(sql, [classification, timespan, start, pagesize], function (error, results, fields) {
+            connection.query(sql, [beginyear, endyear, start, pagesize], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -282,7 +286,7 @@ async function search_artworks(req, res) {
         if (req.query.Title && req.query.Artist) {
             var title_conct = '%' + title + '%'
             var artist_conct = '%' + artist + '%'
-            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan, o.beginYear, o.endYear
             from objects o
             join objects_constituents oc on o.objectID = oc.objectID
             join constituents c on c.constituentID = oc.constituentID
@@ -290,9 +294,12 @@ async function search_artworks(req, res) {
             where oc.roleType='artist'
             and o.title like ?
             and c.forwardDisplayName like ?
-            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?`
+            and o.beginYear > ?
+            and o.endYear < ?
+            order by o.title
+            `
             
-            connection.query(sql, [title_conct, artist_conct, classification, timespan], function (error, results, fields) {
+            connection.query(sql, [title_conct, artist_conct, beginyear, endyear], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -302,17 +309,18 @@ async function search_artworks(req, res) {
             });
         } else if (req.query.Title && !req.query.Artist) {
             var title_conct = '%' + title + '%'
-            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan, o.beginYear, o.endYear
             from objects o
             join objects_constituents oc on o.objectID = oc.objectID
             join constituents c on c.constituentID = oc.constituentID
             join published_images im on im.depictstmsobjectid = o.objectID
             where oc.roleType='artist'
             and o.title like ?
-            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?
-            order by c.forwardDisplayName`
+            and o.beginYear > ?
+            and o.endYear < ?
+            order by o.title, c.forwardDisplayName`
             
-            connection.query(sql, [title_conct, classification, timespan], function (error, results, fields) {
+            connection.query(sql, [title_conct, beginyear, endyear], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -322,17 +330,18 @@ async function search_artworks(req, res) {
             });
         } else if (!req.query.Title && req.query.Artist) {
             var artist_conct = '%' + artist + '%'
-            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan, o.beginYear, o.endYear
             from objects o
             join objects_constituents oc on o.objectID = oc.objectID
             join constituents c on c.constituentID = oc.constituentID
             join published_images im on im.depictstmsobjectid = o.objectID
             where oc.roleType='artist'
             and c.forwardDisplayName like ?
-            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?
+            and o.beginYear > ?
+            and o.endYear < ?
             order by o.title`
             
-            connection.query(sql, [artist_conct, classification, timespan], function (error, results, fields) {
+            connection.query(sql, [artist_conct, beginyear, endyear], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
@@ -341,16 +350,17 @@ async function search_artworks(req, res) {
                 }
             });
         } else {
-            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan
+            var sql = `select DISTINCT o.objectID, o.title, c.forwardDisplayName as artist, o.visualBrowserClassification, o.visualBrowserTimeSpan, o.beginYear, o.endYear
             from objects o
             join objects_constituents oc on o.objectID = oc.objectID
             join constituents c on c.constituentID = oc.constituentID
             join published_images im on im.depictstmsobjectid = o.objectID
             where oc.roleType='artist'
-            and o.visualBrowserClassification = ?  and o.visualBrowserTimeSpan = ?
+            and o.beginYear > ?
+            and o.endYear < ?
             ORDER BY o.title, c.forwardDisplayName`
             
-            connection.query(sql, [classification, timespan], function (error, results, fields) {
+            connection.query(sql, [beginyear, endyear], function (error, results, fields) {
                 if (error) {
                     var array = []
                     res.json({ results: array })
