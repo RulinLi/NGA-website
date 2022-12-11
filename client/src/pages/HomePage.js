@@ -38,7 +38,7 @@ const artistsColumns = [
   },
 
   {
-    title: 'Total Number of Works',
+    title: 'Total Number of Works in NGA',
     dataIndex: 'totalNumWorks',
     key: 'totalNumWorks',
     sorter: (a, b) => a.totalNumWorks - b.totalNumWorks
