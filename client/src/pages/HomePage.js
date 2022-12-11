@@ -35,7 +35,15 @@ const artistsColumns = [
     key: 'constituentType',
     sorter: (a, b) => a.constituentType.localeCompare(b.constituentType)
 
-  }
+  },
+
+  {
+    title: 'Total Number of Works',
+    dataIndex: 'totalNumWorks',
+    key: 'totalNumWorks',
+    sorter: (a, b) => a.totalNumWorks - b.totalNumWorks
+
+}
 
 ];
 

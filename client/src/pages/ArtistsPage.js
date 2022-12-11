@@ -44,7 +44,15 @@ const artistsColumns = [
         key: 'constituentType',
         sorter: (a, b) => a.constituentType.localeCompare(b.constituentType)
 
-    }
+    },
+
+    // {
+    //     title: 'Total Number of Works',
+    //     dataIndex: 'totalNumWorks',
+    //     key: 'totalNumWorks',
+    //     sorter: (a, b) => a.totalNumWorks - b.totalNumWorks
+
+    // }
 
 ];
 
@@ -144,42 +152,6 @@ class ArtistsPage extends React.Component {
                                 </Col>
                             </Row>
 
-                            {/* <br>
-                        </br> */}
-                            {/* <Row gutter='30' align='middle' justify='left'>
-                            <Col>
-                            Age: {this.state.selectedPlayerDetails.Age}
-                            </Col>
-                            <Col>
-                            Height: {this.state.selectedPlayerDetails.Height}
-                            </Col>
-                            <Col>
-                            Weight: {this.state.selectedPlayerDetails.Weight}
-                            </Col>
-
-                            <Col flex={2} style={{ textAlign: 'right' }}>
-                            {this.state.selectedPlayerDetails.Nationality}
-                                <img src={this.state.selectedPlayerDetails.Flag} referrerpolicy="no-referrer" alt={null} style={{height:'3vh', marginLeft: '1vw'}}/>
-                            </Col>
-
-                        </Row> */}
-
-                            {/* <Row gutter='30' align='middle' justify='left'>
-                            <Col>
-                            Value: {this.state.selectedPlayerDetails.Value}
-                            </Col>
-                            <Col>
-                            Release Clause: {this.state.selectedPlayerDetails.ReleaseClause}
-                            </Col>
-                            <Col>
-                            Wage: {this.state.selectedPlayerDetails.Wage}
-                            </Col>
-                            <Col>
-                            Contract Valid Until: {this.state.selectedPlayerDetails.ContractValidUntil}
-                            </Col>
-                        
-                        </Row> */}
-
                         </CardBody>
 
                     </Card>
@@ -206,59 +178,6 @@ class ArtistsPage extends React.Component {
                             </Table>
 
 
-                            {/* <Row gutter='30' align='middle' justify='center'>
-                            <Col flex={2} style={{ textAlign: 'left' }}>
-                            <h6>Skill</h6>
-                            <Rate disabled defaultValue={this.state.selectedPlayerDetails.Skill} />
-                            <h6>Reputation</h6>
-                            <Rate disabled defaultValue={this.state.selectedPlayerDetails.InternationalReputation} />
-                            <Divider/>
-                            <h6>Best Rating</h6>
-                                <Progress style={{ width: '20vw'}} value={this.state.selectedPlayerDetails.BestOverallRating} >{this.state.selectedPlayerDetails.BestOverallRating}</Progress>
-                            <h6>Potential</h6>
-                                <Progress style={{ width: '20vw'}} value={this.state.selectedPlayerDetails.Potential} >{this.state.selectedPlayerDetails.Potential}</Progress>
-                            <h6>Rating</h6>
-                                <Progress style={{ width: '20vw'}} value={this.state.selectedPlayerDetails.Rating} >{this.state.selectedPlayerDetails.Rating}</Progress> 
-                            </Col >
-                                <Col  push={2} flex={2}>
-
-                                    {this.state.selectedPlayerDetails.BestPosition === 'GK'?<RadarChart
-                                data={[this.state.selectedPlayerDetails]}
-                                tickFormat={t => wideFormat(t)}
-                                startingAngle={0}
-                                domains={[
-                                    { name: 'Diving', domain: [0, 100], getValue: d => d.GKDiving },
-                                    { name: 'Handling', domain: [0, 100], getValue: d => d.GKHandling },
-                                    { name: 'Kicking', domain: [0, 100], getValue: d => d.GKKicking },
-                                    { name: 'Penalties', domain: [0, 100], getValue: d => d.GKPenalties },
-                                    { name: 'Positioning', domain: [0, 100], getValue: d => d.GKPositioning },
-                                    { name: 'Reflexes', domain: [0, 100], getValue: d => d.GKReflexes }
-                                ]}
-                                width={450}
-                                height={400}
-                                
-                            />
-                                    
-                                    
-                                    :<RadarChart
-                                data={[this.state.selectedPlayerDetails]}
-                                tickFormat={t => wideFormat(t)}
-                                startingAngle={0}
-                                domains={[
-                                    { name: 'Agility', domain: [0, 100], getValue: d => d.NAdjustedAgility },
-                                    { name: 'Ball Control', domain: [0, 100], getValue: d => d.NBallControl },
-                                    { name: 'Passing', domain: [0, 100], getValue: d => d.NPassing },
-                                    { name: 'Positioning', domain: [0, 100], getValue: d => d.NPositioning },
-                                    { name: 'Stamina', domain: [0, 100], getValue: d => d.NStamina },
-                                    { name: 'Strength', domain: [0, 100], getValue: d => d.NStrength }
-                                ]}
-                                width={450}
-                                height={400}
-                                
-                            />}
-                                
-                                </Col>
-                            </Row> */}
 
                         </CardBody>
                     </Card>
