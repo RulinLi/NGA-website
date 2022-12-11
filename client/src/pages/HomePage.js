@@ -6,7 +6,8 @@ import {
 } from 'antd'
 
 import MenuBar from '../components/MenuBar';
-import { getAllArtworks, getAllArtists } from '../fetcher'
+import MultipleArtworks from '../components/MultipleArtworks';
+import { getAllArtworks, getAllArtists, getRandomArtworks } from '../fetcher'
 const { Column, ColumnGroup } = Table;
 const { Option } = Select;
 
@@ -48,7 +49,8 @@ class HomePage extends React.Component {
       artworksPageNumber: 1,
       artworksPageSize: 10,
       artistsResults: [],
-      pagination: null
+      pagination: null,
+      randomArtworkIds: []
     }
 
     this.classificationOnChange = this.classificationOnChange.bind(this)
@@ -76,15 +78,31 @@ class HomePage extends React.Component {
       this.setState({ artistsResults: res.results })
     })
 
+    this.getRandomArtwork();
+  }
 
+  goToArtworkDetail(artworkId) {
+    window.location.href = `/artworks?id=${artworkId}`;
+  }
+
+  getRandomArtwork() {
+    getRandomArtworks().then(res => {
+      this.setState({ randomArtworkIds: res.results.map(x => x.objectID) })
+    });
   }
 
 
   render() {
-
     return (
       <div>
         <MenuBar />
+        {this.state.randomArtworkIds.length > 0 ?
+          <div style={{ marginTop: '10px' }} >
+            <MultipleArtworks artworkIds={this.state.randomArtworkIds} changeArtWork={this.goToArtworkDetail} />
+          </div>
+          : null}
+
+
         <div style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}>
           <h3>Artists</h3>
           <Table dataSource={this.state.artistsResults} columns={artistsColumns} pagination={{ pageSizeOptions: [5, 10], defaultPageSize: 5, showQuickJumper: true }} />
@@ -93,7 +111,7 @@ class HomePage extends React.Component {
 
         <div style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}>
           <h3>Artworks</h3>
-        
+
           <Select defaultValue="painting" style={{ width: 120 }} onChange={this.classificationOnChange}>
             <Option value="painting">painting</Option>
             <Option value="sculpture">sculpture</Option>
@@ -106,7 +124,7 @@ class HomePage extends React.Component {
             <Option value="photograph">photograph</Option>
             <Option value="new media">new media</Option>
           </Select>
-        
+
 
           <Table onRow={(record, rowIndex) => {
             return {
