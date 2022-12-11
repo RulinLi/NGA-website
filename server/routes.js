@@ -206,7 +206,7 @@ async function search_artworks(req, res) {
             and o.endYear < ?
             order by o.title
             LIMIT ?, ?`
-            
+
             connection.query(sql, [title_conct, artist_conct, beginyear, endyear, start, pagesize], function (error, results, fields) {
                 if (error) {
                     var array = []
@@ -250,7 +250,7 @@ async function search_artworks(req, res) {
             and o.endYear < ?
             ORDER BY o.title
             LIMIT ?,?`
-            
+
             connection.query(sql, [artist_conct, beginyear, endyear, start, pagesize], function (error, results, fields) {
                 if (error) {
                     var array = []
@@ -270,7 +270,7 @@ async function search_artworks(req, res) {
             and o.endYear < ?
             order by o.title, c.forwardDisplayName
             LIMIT ?, ?`
-            
+
             connection.query(sql, [beginyear, endyear, start, pagesize], function (error, results, fields) {
                 if (error) {
                     var array = []
@@ -298,7 +298,7 @@ async function search_artworks(req, res) {
             and o.endYear < ?
             order by o.title
             `
-            
+
             connection.query(sql, [title_conct, artist_conct, beginyear, endyear], function (error, results, fields) {
                 if (error) {
                     var array = []
@@ -319,7 +319,7 @@ async function search_artworks(req, res) {
             and o.beginYear > ?
             and o.endYear < ?
             order by o.title, c.forwardDisplayName`
-            
+
             connection.query(sql, [title_conct, beginyear, endyear], function (error, results, fields) {
                 if (error) {
                     var array = []
@@ -340,7 +340,7 @@ async function search_artworks(req, res) {
             and o.beginYear > ?
             and o.endYear < ?
             order by o.title`
-            
+
             connection.query(sql, [artist_conct, beginyear, endyear], function (error, results, fields) {
                 if (error) {
                     var array = []
@@ -359,7 +359,7 @@ async function search_artworks(req, res) {
             and o.beginYear > ?
             and o.endYear < ?
             ORDER BY o.title, c.forwardDisplayName`
-            
+
             connection.query(sql, [beginyear, endyear], function (error, results, fields) {
                 if (error) {
                     var array = []
@@ -429,8 +429,73 @@ async function search_artists(req, res) {
 
 }
 
+// Route 8 (handler) done
+async function findRelatedArtwork(req, res) {
+    var artworkID = req.params.artworkID;
+    var queryStmt = `with sameTimeArt as (select o2.objectID,
+                o2.locationID,
+                o2.title,
+                o2.visualBrowserClassification,
+                o2.visualBrowserTimeSpan
+        from objects AS o1
+                join objects AS o2
+                    on o1.visualBrowserTimeSpan = o2.visualBrowserTimeSpan
+                        and o1.objectID = '${artworkID}'
+                        and o2.locationID is not null
+        order by rand()
+        limit 3),
+        sameLocationArt as (select distinct o1.objectID
+            from objects AS o1
+                    join published_images as image on o1.objectID = image.depictstmsobjectid
+            where o1.locationID in (select sameTimeArt.locationID from sameTimeArt)
+            order by rand()
+            limit 6)
+        select objectID
+        from sameLocationArt;`
 
+    connection.query(queryStmt, function (error, results, fields) {
+        if (error) {
+            var array = []
+            res.json({ results: array })
+        } else if (results) {
+            res.json({ results: results })
+        }
+    });
+}
 
+// Route 9 (handler) done
+async function randomArtworks(req, res) {
+    var queryStmt = `(select objectID, title, image.iiifThumbURL
+        from objects
+                 join published_images as image on objects.objectID = image.depictstmsobjectid
+        where objects.visualBrowserClassification = 'painting'
+        order by rand()
+        limit 1)
+       union
+       (select objectID, title, image.iiifThumbURL
+        from objects
+                 join published_images as image on objects.objectID = image.depictstmsobjectid
+        where objects.visualBrowserClassification = 'sculpture'
+        order by rand()
+        limit 1)
+       union
+       (select objectID, title, image.iiifThumbURL
+        from objects
+                 join published_images as image on objects.objectID = image.depictstmsobjectid
+        where objects.visualBrowserClassification = 'drawing'
+        order by rand()
+        limit 1);`
+
+    connection.query(queryStmt, function (error, results, fields) {
+        if (error) {
+            var array = []
+            res.json({ results: array })
+        } else if (results) {
+            res.json({ results: results })
+        }
+    });
+
+}
 
 
 
@@ -439,8 +504,10 @@ module.exports = {
     hello,
     all_artworks,
     all_artists,
-    artworkDetail: artworkDetail,
+    artworkDetail,
     artist,
     search_artworks,
-    search_artists
+    search_artists,
+    findRelatedArtwork,
+    randomArtworks
 }

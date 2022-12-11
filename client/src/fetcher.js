@@ -49,8 +49,19 @@ const getArtworkSearch = async (title, artist, beginYear, endYear, page, pagesiz
     return res.json()
 }
 
+const getRelatedArtWork = async (artworkID) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/relatedArtworkDetail/${artworkID}`, {
+        method: 'GET',
+    })
+    return res.json()
+}
 
-
+const getRandomArtworks = async () => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/randomArtwork`, {
+        method: 'GET',
+    })
+    return res.json()
+}
 
 export {
     getAllArtworks,
@@ -59,5 +70,7 @@ export {
     getArtist,
     getMatchSearch,
     getArtistSearch,
-    getArtworkSearch
+    getArtworkSearch,
+    getRelatedArtWork,
+    getRandomArtworks
 }

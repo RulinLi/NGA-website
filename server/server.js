@@ -32,7 +32,11 @@ app.get('/search/artworks', routes.search_artworks)
 // Route 7 - register as GET 
 app.get('/search/artists', routes.search_artists)
 
+// Route 8 - register as GET
+app.get('/relatedArtworkDetail/:artworkID', routes.findRelatedArtwork)
 
+// Route 9 - register as GET
+app.get('/randomArtwork', routes.randomArtworks)
 
 
 
