@@ -85,12 +85,26 @@ class ArtworkPage extends React.Component {
 
             sorter: (a, b) => a.visualBrowserClassification.localeCompare(b.visualBrowserClassification)
         },
-        {
-            title: "Time Span",
-            dataIndex: "visualBrowserTimeSpan",
-            key: "visualBrowserTimeSpan",
+        // {
+        //     title: "Time Span",
+        //     dataIndex: "visualBrowserTimeSpan",
+        //     key: "visualBrowserTimeSpan",
 
-            sorter: (a, b) => a.visualBrowserTimeSpan.localeCompare(b.visualBrowserTimeSpan)
+        //     sorter: (a, b) => a.visualBrowserTimeSpan.localeCompare(b.visualBrowserTimeSpan)
+        // },
+        {
+            title: "Begin Year",
+            dataIndex: "beginYear",
+            key: "beginYear",
+
+            sorter: (a, b) => a.beginYear-b.beginYear
+        },
+        {
+            title: "End Year",
+            dataIndex: "endYear",
+            key: "endYear",
+
+            sorter: (a, b) => a.endYear-b.endYear
         }
     ]
     handleArtworkQueryChange(event) {

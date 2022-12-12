@@ -171,8 +171,8 @@ class ArtistsPage extends React.Component {
 
                                 {/* <Column title="Artist" dataIndex="artist" key="artist" sorter= {(a, b) => a.artist.localeCompare(b.artist)}/> */}
 
-                                <Column title="BeginYear" dataIndex="beginYear" key="beginYear" sorter={(a, b) => Number(a.beginYear) - Number(b.beginYear)} />
-                                <Column title="FinishYear" dataIndex="endYear" key="endYear" sorter={(a, b) => Number(a.endYear) - Number(b.endYear)} />
+                                <Column title="Begin Year" dataIndex="beginYear" key="beginYear" sorter={(a, b) => Number(a.beginYear) - Number(b.beginYear)} />
+                                <Column title="End Year" dataIndex="endYear" key="endYear" sorter={(a, b) => Number(a.endYear) - Number(b.endYear)} />
 
 
                             </Table>
