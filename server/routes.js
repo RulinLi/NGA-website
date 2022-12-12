@@ -130,7 +130,7 @@ async function artworkDetail(req, res) {
     left outer join locations l on l.locationID = o.locationID
     where o.objectID = ${artworkID} and oc.roleType='artist'`
 
-    console.log(sqlStatement)
+    // console.log(sqlStatement)
 
     connection.query(sqlStatement, function (error, results, fields) {
 
