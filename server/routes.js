@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
 connection.connect();
 
 
-// Route 1 (handler)
+// Route 1 (handler) this is only for the test of server
 async function hello(req, res) {
     if (req.query.name) {
         res.send(`Hello, ${req.query.name}! Welcome to the NGA server!`)
@@ -109,7 +109,7 @@ async function all_artists(req, res) {
 //             ARTWORK-SPECIFIC ROUTES
 // ********************************************
 
-// Route 4 (handler) to do
+// Route 4 (handler) done
 async function artworkDetail(req, res) {
     const artworkID = req.params.artworkID
     // const page = req.query.page
@@ -184,7 +184,7 @@ async function artist(req, res) {
 //             SEARCH ROUTES
 // ********************************************
 
-// Route 6 (handler) to do
+// Route 6 (handler) done
 async function search_artworks(req, res) {
     const title = req.query.Title
     const artist = req.query.Artist
