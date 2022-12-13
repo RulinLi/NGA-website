@@ -401,7 +401,7 @@ async function search_artists(req, res) {
             FROM constituents
             WHERE forwardDisplayName LIKE '${name}' and
             nationality LIKE '${nationality}'
-            ORDER BY constituentID
+            ORDER BY forwardDisplayName
             LIMIT ${start},${pagesize}`, function (error, results, fields) {
             if (error) {
                 var array = []
@@ -418,7 +418,7 @@ async function search_artists(req, res) {
             FROM constituents
             WHERE forwardDisplayName LIKE '${name}' and
             nationality LIKE '${nationality}'
-            ORDER BY constituentID`, function (error, results, fields) {
+            ORDER BY forwardDisplayName`, function (error, results, fields) {
             if (error) {
                 var array = []
                 res.json({ results: array })
