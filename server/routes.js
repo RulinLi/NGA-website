@@ -126,7 +126,7 @@ async function artworkDetail(req, res) {
     from objects o 
     join objects_constituents oc on o.objectID = oc.objectID 
     join constituents c on c.constituentID = oc.constituentID 
-    join published_images im on im.depictstmsobjectid = o.objectID 
+    left outer join published_images im on im.depictstmsobjectid = o.objectID 
     left outer join locations l on l.locationID = o.locationID
     where o.objectID = ${artworkID} and oc.roleType='artist'`
 

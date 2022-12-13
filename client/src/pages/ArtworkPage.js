@@ -97,14 +97,14 @@ class ArtworkPage extends React.Component {
             dataIndex: "beginYear",
             key: "beginYear",
 
-            sorter: (a, b) => a.beginYear-b.beginYear
+            sorter: (a, b) => a.beginYear - b.beginYear
         },
         {
             title: "End Year",
             dataIndex: "endYear",
             key: "endYear",
 
-            sorter: (a, b) => a.endYear-b.endYear
+            sorter: (a, b) => a.endYear - b.endYear
         }
     ]
     handleArtworkQueryChange(event) {
@@ -150,11 +150,11 @@ class ArtworkPage extends React.Component {
     }
 
     componentDidMount() {
-
+        this.updateArtworkDetail(this.state.selectedArtworkId)
         getArtworkSearch(this.state.artworkQuery, this.state.artistnameQuery, this.state.beginYearQuery, this.state.endYearQuery, null, null).then(res => {
             this.setState({ artworksResults: res.results })
         })
-        this.updateArtworkDetail(this.state.selectedArtworkId)
+
         // this.getRelatedArtWork();
     }
 
@@ -220,17 +220,20 @@ class ArtworkPage extends React.Component {
                         <Row>
                             {/* artwork specific display can be changed here */}
                             <Col span={6}>
-                                <Card
-                                    style={{ width: '100%' }}
-                                    cover={
-                                        <img
-                                            alt="example"
-                                            src={this.state.selectedArtworkDetails.iiifThumbURL}
-                                        />
-                                    }
+                                {this.state.selectedArtworkDetails.iiifThumbURL ?
+                                    <Card
+                                        style={{ width: '100%' }}
+                                        cover={
+                                            <img
+                                                alt="example"
+                                                src={this.state.selectedArtworkDetails.iiifThumbURL}
+                                            />
+                                        }
 
-                                >
-                                </Card>
+                                    >
+                                    </Card>
+                                    : <p>Image Not Available</p>
+                                }
                             </Col>
                             <Col span={1}></Col>
                             <Col span={14}>
