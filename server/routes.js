@@ -69,10 +69,10 @@ async function all_artists(req, res) {
     const start = (page - 1) * pagesize
 
     if (req.query.page && !isNaN(req.query.page)) {
-        connection.query(`SELECT O_C.constituentID, forwardDisplayName,nationality,constituentType, count(O_C.objectID) AS totalNumWorks
+        connection.query(`SELECT O_C.constituentID, forwardDisplayName, nationality, constituentType, count(O_C.objectID) AS totalNumWorks
         FROM constituents C
         JOIN objects_constituents O_C ON C.constituentID = O_C.constituentID
-        GROUP BY C.constituentID,forwardDisplayName,nationality,constituentType
+        GROUP BY C.constituentID
         ORDER BY forwardDisplayName
         LIMIT ${start},${pagesize}`, function (error, results, fields) {
 
@@ -90,7 +90,7 @@ async function all_artists(req, res) {
         connection.query(`SELECT O_C.constituentID, forwardDisplayName,nationality,constituentType, count(O_C.objectID) AS totalNumWorks
         FROM constituents C
         JOIN objects_constituents O_C ON C.constituentID = O_C.constituentID
-        GROUP BY C.constituentID,forwardDisplayName,nationality,constituentType
+        GROUP BY C.constituentID
         ORDER BY forwardDisplayName`, function (error, results, fields) {
 
             if (error) {
