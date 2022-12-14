@@ -148,7 +148,7 @@ class ArtistsPage extends React.Component {
                                 </Col>
 
                                 <Col flex={2} style={{ textAlign: 'middle' }}>
-                                    <h3>Nation: {this.state.selectedArtistDetails.nationality}</h3>
+                                    <h3>Nationality: {this.state.selectedArtistDetails.nationality}</h3>
                                 </Col>
                             </Row>
 
